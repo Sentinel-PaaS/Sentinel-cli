@@ -4,6 +4,6 @@ http:
       weighted:
         services:
           - name: production_svc@docker
-            weight: 90
+            weight: 2
           - name: canary_svc@docker
-            weight: 10
+            weight: 1
