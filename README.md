@@ -10,9 +10,9 @@ A platform as a service with built in canary deployments
 
 # Test Initial Setup
 
-1. From a terminal, `ssh -i "~/.ssh/ssh-kp.pem" ec2-user@ec2-3-129-248-115.us-east-2.compute.amazonaws.com`
-2. Get the public of the manager node by running `curl http://169.254.169.254/latest/meta-data/public-ipv4`
-3. Visit that IP, unsecured, e.g, `http://3.129.248.115/`
+1. Get the "connect" info for the manager node from your AWS account, to verify that you can ssh into the manager. e.g., `ssh -i "~/.ssh/ssh-kp.pem" ec2-user@ec2-3-129-248-115.us-east-2.compute.amazonaws.com` (make sure you update the path to reflect where your ssh key is stored, i.e., `~/.ssh/`)
+2. While in your manager node, get its public ipv4 `curl http://169.254.169.254/latest/meta-data/public-ipv4` (or get this from the AWS console)
+3. Visit that IP, unsecured (no https), e.g, `http://3.129.248.115/`
 4. 1 out of every 3 times, you should see "THIS IS THE CANARY!!" at the bottom of the page.
 
 # Remove Infrastructure From Test
