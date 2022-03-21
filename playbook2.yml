@@ -1,0 +1,20 @@
+### playbook2.yml
+---
+  - name: Copy Docker Compose and Traefik config files
+    hosts: managers
+    become: true
+    remote_user: ec2-user
+    tasks:
+      - name: Copy files
+        copy:
+          src: ./assets/
+          dest: /
+  - name: Deploy stack and scale to three containers    
+    hosts: managers
+    become: true
+    remote_user: ec2-user
+    tasks:
+      - name: Deploy traefik stack
+        command: sudo docker stack deploy -c /stack-traefik-main.yaml traefik
+      - name: Deploy catnip stack
+        command: sudo docker stack deploy -c /stack-canary.yaml catnip
