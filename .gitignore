@@ -3,4 +3,6 @@
 terraform.tfstate
 terraform.tfstate.backup
 .env
-inventory/hosts
+inventory/
+co_auth_commit.sh
+
