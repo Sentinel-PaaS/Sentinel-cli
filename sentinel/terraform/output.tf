@@ -21,6 +21,8 @@ output "worker2_private_ip" {
 
 resource "local_file" "hosts" {
   content  = <<-DOC
+    [sentinel]
+    ${aws_instance.sentinel.public_ip} ansible_user=ec2-user ansible_private_key_file=~/.ssh/ssh-kp.pem
     [managers]
     ${aws_instance.manager1.public_ip} ansible_user=ec2-user ansible_private_key_file=~/.ssh/ssh-kp.pem
     [managers:vars]
@@ -31,3 +33,11 @@ resource "local_file" "hosts" {
     DOC
   filename = "../ansible/inventory/hosts"
 }
+
+# resource "local_file" "api-token" {
+#   content = <<-DOC
+  
+#   DOC
+#   filename = 
+  
+# }

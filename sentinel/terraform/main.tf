@@ -1,8 +1,17 @@
 ### main.tf
 # Specify the provider and access details
 provider "aws" {
-  # use environment variables to specify AWS access and secret access keys
-  region     = var.aws_region
+  # Use shared configuration and credential files to specify AWS keys
+  region = var.aws_region
+}
+resource "aws_instance" "sentinel" {
+  ami                    = var.ami
+  instance_type          = var.instance_type
+  key_name               = var.key_name
+  vpc_security_group_ids = ["${aws_security_group.allow_http.id}", "${aws_security_group.ssh.id}", "${aws_security_group.traefik_dashboard.id}"]
+  tags = {
+    Name = "Sentinel"
+  }
 }
 resource "aws_instance" "manager1" {
   ami                    = var.ami

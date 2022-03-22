@@ -1,0 +1,11 @@
+# plays for setting up API server
+---
+- name: Set up API server
+  hosts: sentinel
+  become: true
+  gather_facts: False
+  tasks:
+    - name: Enable repo
+      command: sudo amazon-linux-extras enable ansible2
+    - name: Install ansible
+    - name: sudo yum install -y ansible

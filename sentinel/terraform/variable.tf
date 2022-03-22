@@ -11,18 +11,10 @@ variable "instance_type" {
   description = "Instance type"
   default     = "t2.micro"
 }
-# variable "key_path" {
-#   description = "SSH Public Key path"
-#   default     = "~/ssh-keys/ec2-docker.pem"
-# }
 variable "key_name" {
   description = "Desired name of Keypair..."
   default     = "ssh-kp"
 }
-# variable "bootstrap_path" {
-#   description = "Script to install Docker Engine"
-#   default     = "./install_docker_engine_compose.sh"
-# }
 # variable "aws_access_key" {
 #   type        = string
 #   description = "AWS Access Key"

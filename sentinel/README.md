@@ -29,9 +29,8 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`sentinel hello PERSON`](#sentinel-hello-person)
-* [`sentinel hello world`](#sentinel-hello-world)
 * [`sentinel help [COMMAND]`](#sentinel-help-command)
+* [`sentinel init`](#sentinel-init)
 * [`sentinel plugins`](#sentinel-plugins)
 * [`sentinel plugins:install PLUGIN...`](#sentinel-pluginsinstall-plugin)
 * [`sentinel plugins:inspect PLUGIN...`](#sentinel-pluginsinspect-plugin)
@@ -41,46 +40,6 @@ USAGE
 * [`sentinel plugins:uninstall PLUGIN...`](#sentinel-pluginsuninstall-plugin-1)
 * [`sentinel plugins:uninstall PLUGIN...`](#sentinel-pluginsuninstall-plugin-2)
 * [`sentinel plugins update`](#sentinel-plugins-update)
-
-## `sentinel hello PERSON`
-
-Say hello
-
-```
-USAGE
-  $ sentinel hello [PERSON] -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
-
-FLAGS
-  -f, --from=<value>  (required) Whom is saying hello
-
-DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ oex hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
-```
-
-_See code: [dist/commands/hello/index.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.0/dist/commands/hello/index.ts)_
-
-## `sentinel hello world`
-
-Say hello world
-
-```
-USAGE
-  $ sentinel hello world
-
-DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ oex hello world
-  hello world! (./src/commands/hello/world.ts)
-```
 
 ## `sentinel help [COMMAND]`
 
@@ -101,6 +60,23 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
+
+## `sentinel init`
+
+Initialize Sentinel
+
+```
+USAGE
+  $ sentinel init
+
+DESCRIPTION
+  Initialize Sentinel
+
+EXAMPLES
+  $ sentinel init
+```
+
+_See code: [dist/commands/init.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.0/dist/commands/init.ts)_
 
 ## `sentinel plugins`
 
