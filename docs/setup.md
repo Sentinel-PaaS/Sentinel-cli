@@ -6,12 +6,12 @@ More info [here](https://registry.terraform.io/providers/hashicorp/aws/latest/do
 
 Currently we can only deploy in the `us-east-2` region. This is where all resources will be provisioned see issue [#10](https://github.com/Sentinel-PaaS/Sentinel-CLI/issues/10)
 
-You'll also need to install terraform
+You'll also need to install terraform and ansible
 
 Get the sentinel npm package `npm install -g sentinel-cli`
 
 [Note to self: link to the official npm package site] 
 
-As of right now you'll need to copy the terraform directory and it's file into your projects root directory. See issue [#8](https://github.com/Sentinel-PaaS/Sentinel-CLI/issues/8).
+As of right now you'll need to copy the utils directory and it's file into your projects root directory. See issue [#8](https://github.com/Sentinel-PaaS/Sentinel-CLI/issues/8).
 
 In your project's root directory run `sentinel init` 
