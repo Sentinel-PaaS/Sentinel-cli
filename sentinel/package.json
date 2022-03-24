@@ -1,12 +1,12 @@
 {
-  "name": "sentinel-paas",
-  "version": "0.0.0",
+  "name": "sentinel-test-command-line-interface",
+  "version": "0.0.12",
   "description": "Sentinel CLI",
   "author": "Brendan Leal, Michael Fatigati, Samantha Lipari, Drew Sessler",
   "bin": {
     "sentinel": "./bin/run"
   },
-  "homepage": "https://github.com/sentinel/sentinel-paas",
+  "homepage": "https://github.com/Sentinel-PaaS/Sentinel-CLI",
   "license": "MIT",
   "main": "dist/index.js",
   "repository": "sentinel/sentinel-paas",
@@ -20,6 +20,7 @@
     "@oclif/core": "^1",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
+    "axios": "^0.26.1",
     "inquirer": "^8.2.1"
   },
   "devDependencies": {
@@ -61,7 +62,8 @@
     "posttest": "yarn lint",
     "prepack": "yarn build && oclif manifest && oclif readme",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif readme && git add README.md"
+    "version": "oclif readme && git add README.md",
+    "postinstall": "echo $INTI_CWD"
   },
   "engines": {
     "node": ">=12.0.0"

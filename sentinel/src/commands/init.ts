@@ -18,14 +18,15 @@ export default class Init extends Command {
 
   public async run(): Promise<void> {
     try {
-      this.log('Initializing cloud infrastructure. Please wait this may take a few minutes...')
+      this.log('Initializing cloud infrastructure. Please wait this may take a few minutes.')
 
-      const value = await execute('./sentinel_init.sh')
-      
-      // These are useful for debugging
-      // const value = await execute(' ls -la')
-      // console.log(value)
-      
+      console.log(await execute('cd ./terraform && terraform init'))
+
+      this.log('Provisioning resources. Please wait a little longer.')
+
+      console.log(await execute('cd ./terraform && terraform apply -auto-approve'))
+
+      // TODO: Secure copy the host file to ec2 at /home/ec2-user/sentinel-api
 
       this.log('Successfully initializing cloud infrastructure')
 
@@ -33,7 +34,7 @@ export default class Init extends Command {
       // POST to our api endpoint
     } catch (err) {
       console.log(err)
-      this.log('An error ocurred while initializing your infrastructure.')
+      this.error('An error ocurred while initializing your infrastructure.')
     }
   }
 }

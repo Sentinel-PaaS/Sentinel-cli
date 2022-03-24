@@ -16,11 +16,11 @@ oclif example Hello World CLI
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g sentinel-paas
+$ npm install -g sentinel-test-command-line-interface
 $ sentinel COMMAND
 running command...
 $ sentinel (--version)
-sentinel-paas/0.0.0 linux-x64 node-v14.18.0
+sentinel-test-command-line-interface/0.0.12 linux-x64 node-v16.14.2
 $ sentinel --help [COMMAND]
 USAGE
   $ sentinel COMMAND
@@ -29,8 +29,13 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`sentinel canary`](#sentinel-canary)
+* [`sentinel deploy`](#sentinel-deploy)
+* [`sentinel destroy`](#sentinel-destroy)
+* [`sentinel health`](#sentinel-health)
 * [`sentinel help [COMMAND]`](#sentinel-help-command)
 * [`sentinel init`](#sentinel-init)
+* [`sentinel inventory`](#sentinel-inventory)
 * [`sentinel plugins`](#sentinel-plugins)
 * [`sentinel plugins:install PLUGIN...`](#sentinel-pluginsinstall-plugin)
 * [`sentinel plugins:inspect PLUGIN...`](#sentinel-pluginsinspect-plugin)
@@ -40,6 +45,81 @@ USAGE
 * [`sentinel plugins:uninstall PLUGIN...`](#sentinel-pluginsuninstall-plugin-1)
 * [`sentinel plugins:uninstall PLUGIN...`](#sentinel-pluginsuninstall-plugin-2)
 * [`sentinel plugins update`](#sentinel-plugins-update)
+* [`sentinel remove`](#sentinel-remove)
+
+## `sentinel canary`
+
+These commands are used to manage canary deployments for your application
+
+```
+USAGE
+  $ sentinel canary [-d] [-t] [-p] [-r]
+
+FLAGS
+  -d, --deploy    Make a canary deployment
+  -p, --promote   Promote the canary deployment to production
+  -r, --rollback  Rollback the canary deployment
+  -t, --traffic   Increase traffic to the canary deployment
+
+DESCRIPTION
+  These commands are used to manage canary deployments for your application
+
+EXAMPLES
+  $ sentinel canary
+```
+
+_See code: [dist/commands/canary.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/canary.ts)_
+
+## `sentinel deploy`
+
+Deploy your application
+
+```
+USAGE
+  $ sentinel deploy
+
+DESCRIPTION
+  Deploy your application
+
+EXAMPLES
+  $ sentinel deploy
+```
+
+_See code: [dist/commands/deploy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/deploy.ts)_
+
+## `sentinel destroy`
+
+Destroy the entire Sentinel infrastructure and all of your applications.
+
+```
+USAGE
+  $ sentinel destroy
+
+DESCRIPTION
+  Destroy the entire Sentinel infrastructure and all of your applications.
+
+EXAMPLES
+  $ sentinel destroy
+```
+
+_See code: [dist/commands/destroy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/destroy.ts)_
+
+## `sentinel health`
+
+Specify the name of an application and check its health status.
+
+```
+USAGE
+  $ sentinel health
+
+DESCRIPTION
+  Specify the name of an application and check its health status.
+
+EXAMPLES
+  $ sentinel health
+```
+
+_See code: [dist/commands/health.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/health.ts)_
 
 ## `sentinel help [COMMAND]`
 
@@ -76,7 +156,24 @@ EXAMPLES
   $ sentinel init
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.0/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/init.ts)_
+
+## `sentinel inventory`
+
+List all deployed applications
+
+```
+USAGE
+  $ sentinel inventory
+
+DESCRIPTION
+  List all deployed applications
+
+EXAMPLES
+  $ sentinel inventory
+```
+
+_See code: [dist/commands/inventory.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/inventory.ts)_
 
 ## `sentinel plugins`
 
@@ -307,4 +404,24 @@ FLAGS
 DESCRIPTION
   Update installed plugins.
 ```
+
+## `sentinel remove`
+
+Remove an application from production. This is not meant for canary deployments
+
+```
+USAGE
+  $ sentinel remove -a <value>
+
+FLAGS
+  -a, --app=<value>  (required) application name
+
+DESCRIPTION
+  Remove an application from production. This is not meant for canary deployments
+
+EXAMPLES
+  $ sentinel remove -a <myapp>
+```
+
+_See code: [dist/commands/remove.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/remove.ts)_
 <!-- commandsstop -->
