@@ -3,6 +3,5 @@
 terraform.tfstate
 terraform.tfstate.backup
 .env
-inventory/
 co_auth_commit.sh
-
+sentinel-ip.txt
