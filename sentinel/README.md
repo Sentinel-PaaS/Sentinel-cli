@@ -20,7 +20,7 @@ $ npm install -g sentinel-test-command-line-interface
 $ sentinel COMMAND
 running command...
 $ sentinel (--version)
-sentinel-test-command-line-interface/0.0.12 linux-x64 node-v16.14.2
+sentinel-test-command-line-interface/0.0.13 linux-x64 node-v14.18.0
 $ sentinel --help [COMMAND]
 USAGE
   $ sentinel COMMAND
@@ -68,7 +68,7 @@ EXAMPLES
   $ sentinel canary
 ```
 
-_See code: [dist/commands/canary.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/canary.ts)_
+_See code: [dist/commands/canary.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/canary.ts)_
 
 ## `sentinel deploy`
 
@@ -85,7 +85,7 @@ EXAMPLES
   $ sentinel deploy
 ```
 
-_See code: [dist/commands/deploy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/deploy.ts)_
+_See code: [dist/commands/deploy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/deploy.ts)_
 
 ## `sentinel destroy`
 
@@ -102,7 +102,7 @@ EXAMPLES
   $ sentinel destroy
 ```
 
-_See code: [dist/commands/destroy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/destroy.ts)_
+_See code: [dist/commands/destroy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/destroy.ts)_
 
 ## `sentinel health`
 
@@ -119,7 +119,7 @@ EXAMPLES
   $ sentinel health
 ```
 
-_See code: [dist/commands/health.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/health.ts)_
+_See code: [dist/commands/health.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/health.ts)_
 
 ## `sentinel help [COMMAND]`
 
@@ -156,7 +156,7 @@ EXAMPLES
   $ sentinel init
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/init.ts)_
 
 ## `sentinel inventory`
 
@@ -173,7 +173,7 @@ EXAMPLES
   $ sentinel inventory
 ```
 
-_See code: [dist/commands/inventory.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/inventory.ts)_
+_See code: [dist/commands/inventory.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/inventory.ts)_
 
 ## `sentinel plugins`
 
@@ -423,5 +423,5 @@ EXAMPLES
   $ sentinel remove -a <myapp>
 ```
 
-_See code: [dist/commands/remove.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.12/dist/commands/remove.ts)_
+_See code: [dist/commands/remove.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/remove.ts)_
 <!-- commandsstop -->

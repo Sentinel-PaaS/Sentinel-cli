@@ -1,6 +1,6 @@
 {
   "name": "sentinel-test-command-line-interface",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Sentinel CLI",
   "author": "Brendan Leal, Michael Fatigati, Samantha Lipari, Drew Sessler",
   "bin": {
