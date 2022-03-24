@@ -5,13 +5,7 @@
   - Terraform 
   - Ansible
 - You'll also need an AWS account
-- Don't forget to run `terraform init`
-
-# Set environment variables
-```
-$ export AWS_ACCESS_KEY_ID="aws_accesskey"
-$ export AWS_SECRET_ACCESS_KEY="aws_secretkey"
-```
-
+- Make sure you set your AWS credentials correctly
 
 # Oclif and the CLI
+The oclif CLI is responsible for sending HTTP requests to the Sentinel API server. 

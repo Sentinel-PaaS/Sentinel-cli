@@ -6,3 +6,11 @@ More info [here](https://registry.terraform.io/providers/hashicorp/aws/latest/do
 
 
 You'll also need to install terraform
+
+Get the sentinel npm package `npm install -g sentinel-cli`
+
+[Note to self: link to the official npm package site] 
+
+As of right now you'll need to copy the terraform directory and it's file into your projects root directory. See issue [#8](https://github.com/Sentinel-PaaS/Sentinel-CLI/issues/8).
+
+In your project's root directory run `sentinel init` 
