@@ -1,0 +1,22 @@
+---
+- name: Git clone the repository
+  git:
+    repo: https://github.com/Sentinel-PaaS/sentinel-api-2.git
+    dest: /home/ec2-user/sentinel-api-2
+    clone: yes
+- name: Change user permissions
+  command: chmod 777 /home/ec2-user/sentinel-api-2
+# - name: Install pm2
+#   npm:
+#     name: pm2
+#     global: yes
+#     executable: /home/ec2-user/.nvm/versions/node/v16.14.2/bin/
+
+# # shell: npm install pm2 -g
+# - name: Change the working directory and install dependencies
+#   become_user: root
+#   npm:
+#     executable: /home/ec2-user/.nvm/versions/node/v16.14.2/bin/
+#     ci: yes
+#     path: /home/ec2-user/sentinel-api-2/
+# # - name: Install dependencies

@@ -31,12 +31,11 @@ export default class Init extends Command {
 
       this.log('The Sentinel server has successfully started up, but we need your permission to SSH into it to make final adjustments\n')
 
-      console.log(await execute('cd ./utils/ansible && ansible-playbook -i ./inventory/hosts init.yml --fork 1'))
+      console.log(await execute('cd ./utils/ansible && ansible-playbook -i ./inventory/hosts playbook.yml --fork 1'))
 
       // TODO: Secure copy the host file to ec2 at /home/ec2-user/sentinel-api
 
-
-      this.log('Successfully initializing cloud infrastructure')
+      this.log('Successfully initialized cloud infrastructure')
 
       // TODO: prompt user to create password that will be used to authenticate subsequent requests
       // POST to our api endpoint

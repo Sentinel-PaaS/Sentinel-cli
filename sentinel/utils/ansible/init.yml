@@ -1,6 +1,0 @@
-- hosts: sentinel 
-  roles:
-    - role: ansible-role-nvm
-      nodejs_version: "8.16.0"
-      nvm_commands:
-       - "nvm exec default npm install"
