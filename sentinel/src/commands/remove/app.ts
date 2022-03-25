@@ -5,7 +5,7 @@ export default class App extends Command {
   static description = 'Removes an application from production.'
 
   static examples = [
-    '<%= config.bin %> <%= command.id %> -a <myapp>',
+    '<%= config.bin %> <%= command.id %>',
   ]
 
   //static flags = {
