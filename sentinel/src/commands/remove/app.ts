@@ -36,9 +36,9 @@ export default class App extends Command {
       },
     ])
     //if (answers.removeApp) {
-    //  // let response = await api.removeApp(flags.app)
+    //  // let response = await api.removeApp(answers)
     //  if (response.data.status === 200) {
-    //    this.log(flags.app + ' has been removed from production')
+    //    this.log(answers.app + ' has been removed from production')
     //  } else {
     //    this.error('Please verify you entered the correct application name')
     //  }

@@ -63,8 +63,8 @@ const api = {
   getApp: async (answers) => { //Left off here
     await axios.get(url + `/api/apps/${answers.appName}`)
   },
-  removeApp: async () => {
-    await axios.delete(url + '/api/apps/remove')
+  removeApp: async (answers) => {
+    await axios.delete(url + `/api/apps/${answers.appName}`)
   },
   destroyAll: async () => {
     await axios.delete(url + '/api/destroy')
@@ -78,6 +78,13 @@ const api = {
   },
   inspectCluster: async (answers) => {
     await axios.get(url + '/api/cluster')
+  },
+  scaleApp: async (answers) => {
+    await axios.post(url + `/api/apps/${answers.appName}/scale`, {
+      data: {
+        scaleNumber: answers.scaleNumber,
+      },
+    })
   },
 }
 

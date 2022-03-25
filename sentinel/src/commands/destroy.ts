@@ -14,7 +14,7 @@ export default class Destroy extends Command {
       {
         type: 'confirm',
         name: 'destroyAll',
-        message: 'Are you sure you want to destroy all application and Sentinel? This cannot be undone',
+        message: 'Are you sure you want to destroy all applications and Sentinel? This cannot be undone',
         default: false,
       },
     ])

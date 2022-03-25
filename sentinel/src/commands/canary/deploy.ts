@@ -32,7 +32,7 @@ export default class Deploy extends Command {
         validate(input: string) {
           // TODO: validate with regex
           //Check that it is a valid digit
-          if (input.length > 0) return true
+          if (input.length === 0 || +input > 0) return true
           throw new Error('Please provide a valid port number.')
         },
       },
@@ -52,7 +52,7 @@ export default class Deploy extends Command {
         message: 'If your canary image exposes a port, please specify the port number: ',
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length === 0 || +input > 0) return true
           throw new Error('Please provide a valid port number.')
         },
       },

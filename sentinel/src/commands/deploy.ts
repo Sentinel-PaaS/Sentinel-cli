@@ -27,6 +27,12 @@ export default class Deploy extends Command {
         type: 'input',
         name: 'appImagePort',
         message: 'If your image exposes a port, please specify the port number: ',
+        validate(input: string) {
+          // TODO: validate with regex
+          //Check that it is a valid digit
+          if (input.length === 0 || +input > 0) return true
+          throw new Error('Please provide a valid port number.')
+        },
       },
       {
         type: 'input',
