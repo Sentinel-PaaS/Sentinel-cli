@@ -29,7 +29,7 @@ export default class Init extends Command {
       // Give AWS a few seconds to catch up before running ansible plays
       console.log(await execute('sleep 3.5'))
 
-      this.log('The Sentinel server has successfully started up, but we need your permission to SSH into it to make final adjustments\n')
+      this.log('The Sentinel server has successfully started up, but we need your permission to SSH into it to make final adjustments. This will take some time feel free to take a break.\n')
 
       console.log(await execute('cd ./utils/ansible && ansible-playbook -i ./inventory/hosts playbook.yml --fork 1'))
 
