@@ -1,11 +1,11 @@
 import {Command, Flags} from '@oclif/core'
 const inquirer = require('inquirer')
 
-export default class Health extends Command {
-  static description = 'Specify the name of an application and check its health status.'
+export default class App extends Command {
+  static description = 'Provides deployment information on a specific application'
 
   static examples = [
-    '<%= config.bin %> <%= command.id %>',
+    'sentinel inspect app',
   ]
 
   public async run(): Promise<void> {
@@ -22,11 +22,12 @@ export default class Health extends Command {
         },
       },
     ])
-    //let response = api.getAppHealth(answers)
+    //let response = api.getApp(answers)
     //if (response.data.status === 200) {
-    //  this.log('answers.appName is response.data.health')
+    //  this.log('App information: reponse.data.body')
     //} else {
     //  this.error('Please verify you entered the correct application name')
     //}
+    console.log(JSON.stringify(answers))
   }
 }

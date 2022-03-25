@@ -12,62 +12,74 @@ fs.readFile(path.join(__dirname, ipFile), 'utf-8', (err, data) => {
 
 // Make sure axios headers are implemented correctly
 const api = {
-  deployApplication: async (answers) => {
+  deployApplication: async (answers) => { //done
     await axios.post(url + '/api/apps', {
       headers: {
         Authorization: 'Bearer ' //+ token
       },
       data: {
         appImage: answers.appImage,
+        appPort: answers.appImagePort,
         appName: answers.appName,
         hostName: answers.hostName,
-        databaseImage: answers.databaseImage,
-      }
-    });
+        appHasDatabase: answers.hasDatabase,
+        dbUsername: answers.dbUsername,
+        dbPassword: answers.dbPassword,
+      },
+    })
   },
-  canaryDeploy: async (answers) => {
-    await axios.post(url + '/api/apps/canary/deploy', {
+  canaryDeploy: async (answers) => { //done
+    await axios.post(url + `/api/apps/${answers.appName}/canary`, {
       data: {
         appImage: answers.appImage,
+        appPort: answers.appImagePort,
+        canaryImage: answers.canaryImage,
+        canaryPort: answers.canaryImagePort,
         appName: answers.appName,
+        hostName: answers.hostName,
+        appHasDatabase: answers.hasDatabase,
+        dbUsername: answers.dbUsername,
+        dbPassword: answers.dbPassword,
+        canaryTraffic: answers.trafficPercentage,
       },
-    });
+    })
   },
-  canaryTraffic: async (answers) => {
-    await axios.post(url + '/api/apps/canary/traffic', {
+  canaryTraffic: async (answers) => { //done
+    await axios.put(url + `/api/apps/${answers.appName}/canary`, {
       data: {
-        appName: answers.appName,
         trafficPercentage: answers.trafficPercentage,
       },
-    });
+    })
   },
-  promoteCanary: async (answers) => {
-    await axios.post(url + '/api/apps/canary/promote', {
-      data: {
-        appName: answers.appName,
-      },
-    });
+  promoteCanary: async (answers) => { //done
+    await axios.post(url + `/api/apps/${answers.appName}/promote`)
   },
-  rollbackCanary: async (answers) => {
-    await axios.post(url + '/api/apps/canary/rollback', {
-      data: {
-        appName: answers.appName,
-      },
-    });
+  rollbackCanary: async (answers) => { //done
+    await axios.post(url + `/api/apps/${answers.appName}/rollback`)
   },
-  getInventory: async () => {
-    await axios.get(url + '/api/apps/');
+  getApps: async () => { //done
+    await axios.get(url + '/api/apps/')
   },
-  getAppHeatlh: async () => {
-    await axios.get(url + '/api/apps/health');
+  getApp: async (answers) => { //Left off here
+    await axios.get(url + `/api/apps/${answers.appName}`)
   },
   removeApp: async () => {
-    await axios.delete(url + '/api/apps/remove');
+    await axios.delete(url + '/api/apps/remove')
   },
   destroyAll: async () => {
-    await axios.delete(url + '/api/destroy');
+    await axios.delete(url + '/api/destroy')
   },
-};
+  scaleCluster: async (answers) => {
+    await axios.put(url + '/api/cluster/scale', {
+      data: {
+        scaleCluster: answers.scaleCluster,
+      },
+    })
+  },
+  inspectCluster: async (answers) => {
+    await axios.get(url + '/api/cluster')
+  },
+}
 
-export default api;
+export default api
 
