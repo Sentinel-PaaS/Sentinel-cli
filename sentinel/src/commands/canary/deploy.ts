@@ -3,19 +3,21 @@ import { Command, Flags } from '@oclif/core'
 const inquirer = require('inquirer')
 //const api = require('../lib/api.ts')
 // import { api } from "../lib/api.js";
+
+
 export default class Deploy extends Command {
-  static description = 'Deploy your application'
+  static description = 'Initiates a canary deployment'
 
   static examples = [
-    '$ sentinel deploy'
+    '$ sentinel canary deploy'
   ]
 
   public async run(): Promise<void> {
-    const answers = await inquirer.prompt([
+    let answers = await inquirer.prompt([
       {
         type: 'input',
         name: 'appImage',
-        message: 'What is the Docker Hub image name? ex: username/image_name',
+        message: 'What is the Docker Hub image name for your production application? ex: username/image_name',
         validate(input: string) {
           // TODO: validate with regex
           if (input.length > 0) return true
@@ -26,17 +28,32 @@ export default class Deploy extends Command {
       {
         type: 'input',
         name: 'appImagePort',
-        message: 'If your image exposes a port, please specify the port number: ',
+        message: 'If your production application image exposes a port, please specify the port number: ',
+        validate(input: string) {
+          // TODO: validate with regex
+          //Check that it is a valid digit
+          if (input.length > 0) return true
+          throw new Error('Please provide a valid port number.')
+        },
       },
       {
         type: 'input',
-        name: 'appName',
-        message: 'What is the name of your application?',
+        name: 'canaryImage',
+        message: 'What is the Docker Hub image name for the canary? ex: username/image_name',
         validate(input: string) {
           // TODO: validate with regex
           if (input.length > 0) return true
-
-          throw new Error('Please provide an application name.')
+          throw new Error('Please provide a valid Docker Hub image name.')
+        },
+      },
+      {
+        type: 'input',
+        name: 'canaryImagePort',
+        message: 'If your canary image exposes a port, please specify the port number: ',
+        validate(input: string) {
+          // TODO: validate with regex
+          if (input.length > 0) return true
+          throw new Error('Please provide a valid port number.')
         },
       },
       {
@@ -48,6 +65,16 @@ export default class Deploy extends Command {
           if (input.length > 0) return true
 
           throw new Error('Please provide a host name.')
+        },
+      },
+      {
+        type: 'input',
+        name: 'appName',
+        message: 'What is the name of your application?',
+        validate(input: string) {
+          // TODO: validate with regex
+          if (input.length > 0) return true
+          throw new Error('Please provide an application name.')
         },
       },
       {
@@ -88,22 +115,14 @@ export default class Deploy extends Command {
         },
       },
       {
-        type: 'editor',
-        name: 'createDbFile',
-        message: 'If you have .sql file that creates your database ',
-        when(answers: any) {
-          return answers.hasDatabase
-        },
-        validate(input: string) {
-          // TODO: validate with regex
-          if (input.length > 0) return true
-
-          throw new Error('Please provide a database password.')
-        },
+        type: 'list',
+        name: 'trafficPercentage',
+        message: 'What percentage of traffic do you want to route to the canary?',
+        choices: ['5%', '10%', '20%'],
+        require: true,
       },
     ])
 
-    // eslint-disable-next-line unicorn/consistent-function-scoping
     function hasDatabase(answers: any) {
       return function () {
         return [answers.dbUserName, answers.dbPassword]
@@ -116,30 +135,29 @@ export default class Deploy extends Command {
         name: 'deployConfirmation',
         message: `Please confirm the information you entered is correct:
           Application Image: ${answers.appImage}
-          Port: ${answers.appImagePort || 'N/A'}
+          Application Port: ${answers.appImagePort || 'N/A'}
+          Canary Image: ${answers.canaryImage}
+          Canary Port: ${answers.canaryImagePort || 'N/A'}
           Application Name: ${answers.appName}
           Host Name: ${answers.hostName}
           Application Has Database: ${answers.hasDatabase}
           Database Username: ${answers.dbUsername || 'N/A'}
-          Database Password: ${answers.dbPassword || 'N/A'}`,
+          Database Password: ${answers.dbPassword || 'N/A'},
+          Percentage of traffic routed to canary: ${answers.trafficPercentage}`,
       },
     ])
-
+  
     if (finalConfirmation.deployConfirmation) {
-      this.log('Deploying application...')
+      this.log('Deploying canary...')
+      //let response = api.canaryDeploy(answers)
+      //if (response.data.status === 200) {
+      //  this.log('The canary has been deployed')
+      //} else {
+      //    this.log('Something went wrong')
+      //}
     } else {
-      this.log('Canceling deployment...')
+      this.log('Canceling canary deployment...')
     }
-    //console.log(JSON.stringify(answers, finalConfirmation))
-
-    // if (finalConfirmation.deployConfirmation){
-      //console.log('Deploying application...')
-      // let response = await api.deployApplication(answers)
-      // if (response.data.status === 200) {
-      //   this.log("Make sure your host name points to this ip address: " response.data.ipAddress)
-      // } else {
-      //    this.error("An error occurred")
-      // }
-    // }
-    }
+    //api.canaryDeploy(answers)
   }
+}
