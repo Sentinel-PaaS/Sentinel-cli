@@ -1,7 +1,0 @@
----
-- name: Reset stack
-  hosts: managers
-  become: true
-  tasks:
-    - name: remove service 
-      command: docker service rm 
