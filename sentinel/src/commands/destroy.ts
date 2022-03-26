@@ -1,4 +1,5 @@
-import { Command, Flags } from '@oclif/core'
+/* eslint-disable max-lines-per-function */
+import {Command} from '@oclif/core'
 const inquirer = require('inquirer')
 const childProcess = require('child_process')
 
@@ -18,6 +19,7 @@ export default class Destroy extends Command {
         default: false,
       },
     ])
+
     if (answers.destroyAll) {
       this.log('Tearing down your applications and Sentinel, please wait this may take a few minutes.')
 

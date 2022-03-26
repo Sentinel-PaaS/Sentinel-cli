@@ -17,12 +17,12 @@ export default class Deploy extends Command {
       {
         type: 'input',
         name: 'appImage',
-        message: 'What is the Docker Hub image name for your production application? ex: username/image_name',
+        message: 'Please provide the registry and repository of your production application image. ex: registry/respository',
         validate(input: string) {
           // TODO: validate with regex
           if (input.length > 0) return true
 
-          throw new Error('Please provide a valid Docker Hub image name.')
+          throw new Error('Please provide a valid registry/repository.')
         },
       },
       {
@@ -39,11 +39,11 @@ export default class Deploy extends Command {
       {
         type: 'input',
         name: 'canaryImage',
-        message: 'What is the Docker Hub image name for the canary? ex: username/image_name',
+        message: 'Please provide the registry and repository of your canary application image. ex: registry/repository',
         validate(input: string) {
           // TODO: validate with regex
           if (input.length > 0) return true
-          throw new Error('Please provide a valid Docker Hub image name.')
+          throw new Error('Please provide a valid registry/repository.')
         },
       },
       {

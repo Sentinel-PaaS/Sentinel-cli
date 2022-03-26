@@ -1,4 +1,4 @@
-import {Command, Flags} from '@oclif/core'
+import {Command} from '@oclif/core'
 const inquirer = require('inquirer')
 
 export default class App extends Command {
@@ -7,16 +7,7 @@ export default class App extends Command {
   static examples = [
     '<%= config.bin %> <%= command.id %>',
   ]
-
-  //static flags = {
-  //  // flag with a value (-n, --name=VALUE)
-  //  app: Flags.string({char: 'a', description: 'application name', required: true}),
-  //}
-
-  // static args = [{name: 'file'}]
-
   public async run(): Promise<void> {
-    //const {flags} = await this.parse(Remove)
     let answers = await inquirer.prompt([
       {
         type: 'input',
@@ -24,7 +15,7 @@ export default class App extends Command {
         message: 'What is the name of your application?',
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
           throw new Error('Please provide an application name.')
         },
       },
@@ -32,7 +23,7 @@ export default class App extends Command {
         type: 'confirm',
         name: 'removeApp',
         message: 'Are you sure you want to remove this application from production?',
-        default: false,
+        required: true,
       },
     ])
     //if (answers.removeApp) {

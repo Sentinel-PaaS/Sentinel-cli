@@ -16,9 +16,9 @@ export default class App extends Command {
         message: 'What is the name of your application?',
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide an application name.')
+          throw new Error('Please provide an application name with no spaces.')
         },
       },
     ])

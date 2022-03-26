@@ -1,26 +1,32 @@
+/* eslint-disable max-len */
 /* eslint-disable max-lines-per-function */
 import { Command, Flags } from '@oclif/core'
 const inquirer = require('inquirer')
-//const api = require('../lib/api.ts')
-// import { api } from "../lib/api.js";
+const inquirerFilePath = require('inquirer-file-path')
+const fs = require('fs')
+const currentDir = process.cwd().match(/\w+/g)
+const numOfFoldersToGetToHome = currentDir ? currentDir.length - 1 : 1
+
+//import api from '../lib/api.js'
 export default class Deploy extends Command {
   static description = 'Deploy your application'
 
   static examples = [
-    '$ sentinel deploy'
+    '$ sentinel deploy',
   ]
 
   public async run(): Promise<void> {
+    inquirer.registerPrompt('file', inquirerFilePath)
     const answers = await inquirer.prompt([
       {
         type: 'input',
         name: 'appImage',
-        message: 'What is the Docker Hub image name? ex: username/image_name',
+        message: 'Please provide the registry and repository of your application image. ex: registry/respository',
         validate(input: string) {
           // TODO: validate with regex
           if (input.length > 0) return true
 
-          throw new Error('Please provide a valid Docker Hub image name.')
+          throw new Error('Please provide a valid registry/repository.')
         },
       },
       {
@@ -39,10 +45,9 @@ export default class Deploy extends Command {
         name: 'appName',
         message: 'What is the name of your application?',
         validate(input: string) {
-          // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide an application name.')
+          throw new Error('Please provide an application name with no spaces.')
         },
       },
       {
@@ -50,10 +55,9 @@ export default class Deploy extends Command {
         name: 'hostName',
         message: 'What is the host name of your application? ex: helloworld.com',
         validate(input: string) {
-          // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide a host name.')
+          throw new Error('Please provide a valid host name.')
         },
       },
       {
@@ -74,9 +78,9 @@ export default class Deploy extends Command {
         },
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide a database user name.')
+          throw new Error('Please provide a database user name with no spaces.')
         },
       },
       {
@@ -88,23 +92,33 @@ export default class Deploy extends Command {
         },
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide a database password.')
+          throw new Error('Please provide a database password with no spaces.')
         },
       },
       {
-        type: 'editor',
-        name: 'createDbFile',
-        message: 'If you have .sql file that creates your database ',
+        type: 'confirm',
+        name: 'createSchemaOnDeploy',
+        message: 'Would you like your database schema created on deploy? Choose yes if your code doesn\'t create your database schema and you will provide the .sql file in the next step',
+        default: false,
         when(answers: any) {
           return answers.hasDatabase
         },
+      },
+      {
+        type: 'file',
+        name: 'pathToDbFile',
+        message: 'If you would like your database schema created on initialization, please provide the path to your sql file',
+        basePath: '/..'.repeat(numOfFoldersToGetToHome),
+        when(answers: any) {
+          return answers.createSchemaOnDeploy
+        },
         validate(input: string) {
-          // TODO: validate with regex
-          if (input.length > 0) return true
+          //this validation doesn't work
+          if (input.endsWith('.sql')) return true
 
-          throw new Error('Please provide a database password.')
+          throw new Error('Please provide a .sql file')
         },
       },
     ])
@@ -112,7 +126,7 @@ export default class Deploy extends Command {
     // eslint-disable-next-line unicorn/consistent-function-scoping
     function hasDatabase(answers: any) {
       return function () {
-        return [answers.dbUserName, answers.dbPassword]
+        return [answers.dbUserName, answers.dbPassword, answers.createSchemaOnDeploy]
       }
     }
 
@@ -127,25 +141,36 @@ export default class Deploy extends Command {
           Host Name: ${answers.hostName}
           Application Has Database: ${answers.hasDatabase}
           Database Username: ${answers.dbUsername || 'N/A'}
-          Database Password: ${answers.dbPassword || 'N/A'}`,
+          Database Password: ${answers.dbPassword || 'N/A'},
+          Create schema on deploy: ${answers.createSchemaOnDeploy || 'N/A'},
+          Path to SQL File: ${answers.pathToDbFile || 'N/A'}`,
       },
     ])
 
-    if (finalConfirmation.deployConfirmation) {
-      this.log('Deploying application...')
-    } else {
-      this.log('Canceling deployment...')
-    }
-    //console.log(JSON.stringify(answers, finalConfirmation))
+    if (finalConfirmation.deployConfirmation && answers.createSchemaOnDeploy) {
+      const filePath = answers.pathToDbFile.split('/')
+      const dbFileName = filePath[filePath.length - 1]
 
-    // if (finalConfirmation.deployConfirmation){
+      const file = fs.readFileSync('/..'.repeat(numOfFoldersToGetToHome) + '/' + answers.pathToDbFile, 'utf-8', (err: any, data: any) => {
+        if (err) throw err
+        // console.log(data)
+      })
+      console.log('Deploying application...', file, dbFileName)
+      //const response = await api.deployApplication(answers, file, dbFileName)
+      //console.log(response)
+      //if (response.data.status === 200) {
+      //  this.log("Make sure your host name points to this ip address: " + response.data.ipAddress)
+      //} else {
+      //   this.error("An error occurred")
+      //}
+    } else if (finalConfirmation.deployConfirmation && (!answers.hasDatabase || !answers.createSchemaOnDeploy)) {
       //console.log('Deploying application...')
-      // let response = await api.deployApplication(answers)
+      //let response = await api.deployApplication(answers)
       // if (response.data.status === 200) {
       //   this.log("Make sure your host name points to this ip address: " response.data.ipAddress)
       // } else {
       //    this.error("An error occurred")
       // }
-    // }
     }
   }
+}
