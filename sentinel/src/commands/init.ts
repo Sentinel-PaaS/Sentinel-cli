@@ -1,12 +1,11 @@
-/* eslint-disable object-curly-spacing */
 import { Command } from '@oclif/core'
-// const inquirer = require('inquirer')
-// const process = require("process");
 const childProcess = require('child_process')
-// const { spawn } = require("child_process")
+const { spawn } = require('child_process')
+import api from '../lib/api.js'
+let path = ''
 
 export default class Init extends Command {
-  static description = 'Initialize Sentinel'
+  static description = 'Initialize Sentinel infrastructure'
 
   static examples = [
     '$ sentinel init',
@@ -18,22 +17,22 @@ export default class Init extends Command {
 
   public async run(): Promise<void> {
     try {
-      this.log('Initializing cloud infrastructure. Please wait this may take a few minutes.')
+      let user: string = await this.execute('echo $USER')
+      path = `/home/${user.replace('\n', "")}/.sentinel/config`
 
-      console.log(await execute('cd ./utils/terraform && terraform init'))
+      console.log(await this.getConfigFiles());
 
-      this.log('Provisioning resources. Please wait a little longer.')
+      this.log('Initializing cloud infrastructure. Please stand by.')
 
-      console.log(await execute('cd ./utils/terraform && terraform apply -auto-approve'))
+      await this.terraformInit(path)
 
-      // Give AWS a few seconds to catch up before running ansible plays
-      console.log(await execute('sleep 3.5'))
+      await this.terraformApply(path)
 
-      this.log('The Sentinel server has successfully started up, but we need your permission to SSH into it to make final adjustments. This will take some time feel free to take a break.\n')
+      await this.executeAnsible(path)
 
-      console.log(await execute('cd ./utils/ansible && ansible-playbook -i ./inventory/hosts playbook.yml --fork 1'))
+      await api.setURL(path)
 
-      // TODO: Secure copy the host file to ec2 at /home/ec2-user/sentinel-api
+      await api.startDockerSwarm()
 
       this.log('Successfully initialized cloud infrastructure')
 
@@ -44,17 +43,114 @@ export default class Init extends Command {
       this.error('An error ocurred while initializing your infrastructure.')
     }
   }
-}
 
-async function execute(command: string) {
-  return new Promise((resolve, reject) => {
-    childProcess.exec(command, (err: any, contents: any) => {
-      if (err) {
-        reject(err)
-        return
-      }
+  private async getConfigFiles(): Promise<void> {
+    return new Promise((resolve: any, reject: any) => {
+      childProcess.exec('chmod +x config.sh && ./config.sh', (err: any, contents: any) => {
+        if (err) {
+          reject(err)
+          return
+        }
 
-      resolve(contents)
+        resolve(contents)
+      })
     })
-  })
+  }
+
+  private async execute(command: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      childProcess.exec(command, (err: any, contents: any) => {
+        if (err) {
+          reject(err)
+          return
+        }
+
+        resolve(contents)
+      })
+    })
+  }
+
+  private async terraformInit(path: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+
+      const terraformInit = spawn("terraform", [`-chdir=${path}/terraform`, "init", "-input=false"]);
+      terraformInit.stdout.on("data", (data: any) => {
+        console.log(`stdout: ${data}`);
+      });
+
+      terraformInit.stderr.on("data", (data: any) => {
+        console.log(`stderr: ${data}`);
+      });
+
+      terraformInit.on('error', (error: any) => {
+        console.log(`error: ${error.message}`);
+        reject(error.message)
+      });
+
+      terraformInit.on("close", (code: any) => {
+        resolve(`Process exited with code ${code}`)
+      });
+    })
+  }
+
+  private async terraformApply(path: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const terraformApply = spawn("terraform", [`-chdir=${path}/terraform`, "apply", "-input=false", "-auto-approve"]);
+      terraformApply.stdout.on("data", (data: any) => {
+        console.log(`stdout: ${data}`);
+      });
+
+      terraformApply.stderr.on("data", (data: any) => {
+        console.log(`stderr: ${data}`);
+      });
+
+      terraformApply.on('error', (error: any) => {
+        console.log(`error: ${error.message}`);
+        reject(error.message)
+      });
+
+      terraformApply.on("close", (code: any) => {
+        resolve(`Process exited with code ${code}`)
+      });
+    })
+  }
+
+  private async executeAnsible(path: string): Promise<string> {
+    // console.log(await this.execute('cd /home/$USER/.sentinel/config/ansible && ansible-playbook -i ./inventory/hosts playbook.yml --fork 1'))
+
+    return new Promise((resolve, reject) => {
+      const args = [
+        "-i",
+        `${path}/ansible/inventory/hosts`,
+        `${path}/ansible/playbook.yml`,
+        '--fork',
+        '1',
+      ]
+      const options = {
+        env: {
+          ...process.env,
+          ANSIBLE_CONFIG: `${path}/ansible/ansible.cfg`
+        }
+      }
+      this.log(options.env.ANSIBLE_CONFIG)
+      const playbook = spawn("ansible-playbook", args, options);
+
+      playbook.stdout.on("data", (data: any) => {
+        console.log(`stdout: ${data}`);
+      });
+
+      playbook.stderr.on("data", (data: any) => {
+        console.log(`stderr: ${data}`);
+      });
+
+      playbook.on('error', (error: any) => {
+        console.log(`error: ${error.message}`);
+        reject(error.message)
+      });
+
+      playbook.on("close", (code: any) => {
+        resolve(`Process exited with code ${code}`)
+      });
+    })
+  }
 }
