@@ -1,17 +1,26 @@
 const axios = require('axios')
 const path = require('path')
-const ipFile = '../../sentinel-ip.txt'
+const fs = require('fs')
 let url = ''
 
-const fs = require('fs')
-
-fs.readFile(path.join(__dirname, ipFile), 'utf-8', (err, data) => {
-  if (err) throw err
-  url = `http://${data}`
-})
-
-// Make sure axios headers are implemented correctly
+// FIXME: Refactor opportunity, the api object is a good candidate for being class
+// TODO: Make sure axios headers are implemented correctly
 const api = {
+  setURL: async (sentinelConfigPath) => {
+    let sentinelIP = await new Promise((resolve, reject) => {
+      fs.readFile(path.join(`${sentinelConfigPath}/sentinel-ip.txt`), 'utf-8', (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
+    })
+
+    sentinelIP = sentinelIP.replace('\n', '')
+    // FIXME: hard coded port should be 80
+    url = `http://${sentinelIP}:3000`
+  },
   deployApplication: async (answers) => { //done
     await axios.post(url + '/api/apps', {
       headers: {
@@ -79,7 +88,11 @@ const api = {
   inspectCluster: async (answers) => {
     await axios.get(url + '/api/cluster')
   },
+  startDockerSwarm: async () => {
+    console.log(url)
+    // TODO: make the request 
+    // await axios.post(url + '/api/cluster/initialize')
+  },
 }
 
 export default api
-
