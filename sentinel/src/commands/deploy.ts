@@ -7,7 +7,7 @@ const fs = require('fs')
 const currentDir = process.cwd().match(/\w+/g)
 const numOfFoldersToGetToHome = currentDir ? currentDir.length - 1 : 1
 
-//import api from '../lib/api.js'
+import api from '../lib/api.js'
 export default class Deploy extends Command {
   static description = 'Deploy your application'
 
@@ -98,6 +98,34 @@ export default class Deploy extends Command {
         },
       },
       {
+        type: 'input',
+        name: 'dbHost',
+        message: 'Please enter the database host name: ',
+        when(answers: any) {
+          return answers.hasDatabase
+        },
+        validate(input: string) {
+          // TODO: validate with regex
+          if (input.length > 0 && !input.includes(' ')) return true
+
+          throw new Error('Please provide a database host with no spaces.')
+        },
+      },
+      {
+        type: 'input',
+        name: 'dbName',
+        message: 'Please enter the name of the database: ',
+        when(answers: any) {
+          return answers.hasDatabase
+        },
+        validate(input: string) {
+          // TODO: validate with regex
+          if (input.length > 0 && !input.includes(' ')) return true
+
+          throw new Error('Please provide a database name with no spaces.')
+        },
+      },
+      {
         type: 'confirm',
         name: 'createSchemaOnDeploy',
         message: 'Would you like your database schema created on deploy? Choose yes if your code doesn\'t create your database schema and you will provide the .sql file in the next step',
@@ -109,7 +137,7 @@ export default class Deploy extends Command {
       {
         type: 'file',
         name: 'pathToDbFile',
-        message: 'If you would like your database schema created on initialization, please provide the path to your sql file',
+        message: 'Please provide the path to your sql file',
         basePath: '/..'.repeat(numOfFoldersToGetToHome),
         when(answers: any) {
           return answers.createSchemaOnDeploy
@@ -142,6 +170,8 @@ export default class Deploy extends Command {
           Application Has Database: ${answers.hasDatabase}
           Database Username: ${answers.dbUsername || 'N/A'}
           Database Password: ${answers.dbPassword || 'N/A'},
+          Database Name: ${answers.dbName || 'N/A'},
+          Database Host: ${answers.dbHost || 'N/A'},
           Create schema on deploy: ${answers.createSchemaOnDeploy || 'N/A'},
           Path to SQL File: ${answers.pathToDbFile || 'N/A'}`,
       },
@@ -155,14 +185,15 @@ export default class Deploy extends Command {
         if (err) throw err
         // console.log(data)
       })
-      console.log('Deploying application...', file, dbFileName)
-      //const response = await api.deployApplication(answers, file, dbFileName)
-      //console.log(response)
-      //if (response.data.status === 200) {
-      //  this.log("Make sure your host name points to this ip address: " + response.data.ipAddress)
-      //} else {
-      //   this.error("An error occurred")
-      //}
+      console.log('Deploying application...')
+      const sqlResponse: any = await api.uploadSQL(answers, file, dbFileName)
+      const response: any = await api.deployApplication(answers)
+      console.log(response)
+      if (response.status === 200 && sqlResponse.status === 200) {
+        this.log('Make sure your host name points to this ip address: ' + response.data)
+      } else {
+        this.error('An error occurred')
+      }
     } else if (finalConfirmation.deployConfirmation && (!answers.hasDatabase || !answers.createSchemaOnDeploy)) {
       //console.log('Deploying application...')
       //let response = await api.deployApplication(answers)

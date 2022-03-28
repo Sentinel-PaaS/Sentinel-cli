@@ -1,41 +1,71 @@
+import { json } from 'stream/consumers'
+
 /* eslint-disable max-lines-per-function */
 const axios = require('axios')
 const path = require('path')
 const ipFile = '../../sentinel-ip.txt'
 let url = ''
+const tokenFile = '../../utils/token.txt'
+let token = ''
 const FormData = require('form-data')
 
 const fs = require('fs')
 
-fs.readFile(path.join(__dirname, ipFile), 'utf-8', (err, data) => {
-  if (err) throw err
-  url = `http://${data}`
-})
+//fs.readFile(path.join(__dirname, ipFile), 'utf-8', (err, data) => {
+//  if (err) throw err
+//  url = `http://${data}`
+//})
 
 // Make sure axios headers are implemented correctly
 const api = {
-  deployApplication: async (answers, file = '', dbFileName = '') => {
+  readToken: async () => {
+    fs.readFile(path.join(__dirname, tokenFile), 'utf-8', (err, data) => {
+      if (err) throw err
+      token = data
+    })
+  },
+  uploadSQL: async (answers, file, dbFileName) => {
     let form = new FormData()
-    if (answers.pathToDbFile) {
-      form.append(`${answers.appName}_db`, file, dbFileName) //1st arg renames file, 2nd arg is the actual file, 3rd arg is the original file name
+    form.append('app_db', file, dbFileName)
+    let headers = {
+      ...form.getHeaders(),
+      Authorization: `Bearer ${token}`,
     }
 
-    await axios.post(url + '/api/apps', {
-      headers: {
-        ...form.getHeaders(), //This sets the form headers and the form boundary appropriately. Required.
-        Authorization: 'Bearer ' //+ token
-      },
-      data: {
-        appImage: answers.appImage,
-        appPort: answers.appImagePort,
-        appName: answers.appName,
-        hostName: answers.hostName,
-        appHasDatabase: answers.hasDatabase,
-        dbUsername: answers.dbUsername,
-        dbPassword: answers.dbPassword,
-        dbCreateSchemaOnDeploy: answers.createSchemaOnDeploy,
-        dbFile: form,
-      },
+    await axios.post(`http://localhost:3000/api/apps/${answers.appName}/upload`, form, {
+      headers,
+    })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error.message
+    })
+  },
+  deployApplication: async (answers) => {
+    let data = {
+      productionImagePath: answers.appImage,
+      productionPort: answers.appImagePort,
+      appName: answers.appName,
+      hostname: answers.hostName,
+      appHasDatabase: answers.hasDatabase,
+      dbUsername: answers.dbUsername,
+      dbPassword: answers.dbPassword,
+      dbHost: answers.dbHost,
+      dbName: answers.dbName,
+      dbCreateSchemaOnDeploy: answers.createSchemaOnDeploy,
+      //dbFile: form,
+    }
+/*     let form = new FormData()
+    if (answers.dbCreateSchemaOnDeploy) {
+      form.append('app_db', file, dbFileName)
+      form.append('data', new Blob([JSON.stringify(data)]), 'request.json')
+    } */
+
+    let headers = {Authorization: `Bearer ${token}`}
+
+    await axios.post('http://localhost:3000/api/apps', data, {
+      headers,
     })
     .then(response => {
       return response
@@ -45,18 +75,21 @@ const api = {
     })
   },
   canaryDeploy: async (answers) => {
-    await axios.post(url + `/api/apps/${answers.appName}/canary`, {
-      data: {
-        appImage: answers.appImage,
-        appPort: answers.appImagePort,
-        canaryImage: answers.canaryImage,
-        canaryPort: answers.canaryImagePort,
-        appName: answers.appName,
-        hostName: answers.hostName,
-        appHasDatabase: answers.hasDatabase,
-        dbUsername: answers.dbUsername,
-        dbPassword: answers.dbPassword,
-        canaryTraffic: answers.trafficPercentage,
+    let data = {
+      productionImagePath: answers.appImage,
+      productionPort: answers.appImagePort,
+      canaryImagePath: answers.canaryImage,
+      canaryPort: answers.canaryImagePort,
+      hostname: answers.hostName,
+      appHasDatabase: answers.hasDatabase,
+      dbUsername: answers.dbUsername,
+      dbPassword: answers.dbPassword,
+      canaryWeight: answers.trafficPercentage,
+    }
+
+    await axios.post(url + `/api/apps/${answers.appName}/canary`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     })
     .then(response => {
@@ -67,9 +100,13 @@ const api = {
     })
   },
   canaryTraffic: async (answers) => {
-    await axios.put(url + `/api/apps/${answers.appName}/canary`, {
-      data: {
-        trafficPercentage: answers.trafficPercentage,
+    let data = {
+      newWeight: answers.trafficPercentage,
+    }
+
+    await axios.put(url + `/api/apps/${answers.appName}/canary`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     })
     .then(response => {
@@ -80,7 +117,11 @@ const api = {
     })
   },
   promoteCanary: async (answers) => {
-    await axios.post(url + `/api/apps/${answers.appName}/promote`)
+    await axios.post(url + `/api/apps/${answers.appName}/promote`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
       return response
     })
@@ -89,7 +130,11 @@ const api = {
     })
   },
   rollbackCanary: async (answers) => {
-    await axios.post(url + `/api/apps/${answers.appName}/rollback`)
+    await axios.post(url + `/api/apps/${answers.appName}/rollback`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
       return response
     })
@@ -98,7 +143,11 @@ const api = {
     })
   },
   getApps: async () => {
-    await axios.get(url + '/api/apps/')
+    await axios.get(url + '/api/apps/', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
       return response
     })
@@ -107,7 +156,11 @@ const api = {
     })
   },
   getApp: async (answers) => {
-    await axios.get(url + `/api/apps/${answers.appName}`)
+    await axios.get(url + `/api/apps/${answers.appName}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
       return response
     })
@@ -116,7 +169,11 @@ const api = {
     })
   },
   removeApp: async (answers) => {
-    await axios.delete(url + `/api/apps/${answers.appName}`)
+    await axios.delete(url + `/api/apps/${answers.appName}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
       return response
     })
@@ -125,7 +182,11 @@ const api = {
     })
   },
   destroyAll: async () => {
-    await axios.delete(url + '/api/destroy')
+    await axios.delete(url + '/api/destroy', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
       return response
     })
@@ -134,9 +195,13 @@ const api = {
     })
   },
   scaleCluster: async (answers) => {
-    await axios.put(url + '/api/cluster/scale', {
-      data: {
-        scaleCluster: answers.scaleCluster,
+    let data = {
+      scaleCluster: answers.scaleCluster,
+    }
+
+    await axios.put(url + '/api/cluster/scale', data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     })
     .then(response => {
@@ -147,7 +212,11 @@ const api = {
     })
   },
   inspectCluster: async (answers) => {
-    await axios.get(url + '/api/cluster')
+    await axios.get(url + '/api/cluster', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
       return response
     })
@@ -156,9 +225,13 @@ const api = {
     })
   },
   scaleApp: async (answers) => {
-    await axios.put(url + `/api/apps/${answers.appName}/scale`, {
-      data: {
-        scaleNumber: answers.scaleNumber,
+    let data = {
+      scaleNumber: answers.scaleNumber,
+    }
+
+    await axios.put(url + `/api/apps/${answers.appName}/scale`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     })
     .then(response => {
@@ -169,7 +242,11 @@ const api = {
     })
   },
   initializeCluster: async(answers) => {
-    await axios.post(url + '/api/cluster/initialize')
+    await axios.post(url + '/api/cluster/initialize', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
       return response
     })

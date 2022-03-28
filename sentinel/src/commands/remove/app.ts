@@ -8,6 +8,7 @@ export default class App extends Command {
     '<%= config.bin %> <%= command.id %>',
   ]
   public async run(): Promise<void> {
+
     let answers = await inquirer.prompt([
       {
         type: 'input',
@@ -26,6 +27,7 @@ export default class App extends Command {
         required: true,
       },
     ])
+
     //if (answers.removeApp) {
     //  // let response = await api.removeApp(answers)
     //  if (response.data.status === 200) {

@@ -62,7 +62,7 @@ export default class Deploy extends Command {
         message: 'What is the host name of your application? ex: helloworld.com',
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a host name.')
         },
@@ -73,8 +73,8 @@ export default class Deploy extends Command {
         message: 'What is the name of your application?',
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
-          throw new Error('Please provide an application name.')
+          if (input.length > 0 && !input.includes(' ')) return true
+          throw new Error('Please provide an application name with no spaces.')
         },
       },
       {
@@ -95,9 +95,9 @@ export default class Deploy extends Command {
         },
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide a database user name.')
+          throw new Error('Please provide a database user name with no spaces.')
         },
       },
       {
@@ -109,17 +109,21 @@ export default class Deploy extends Command {
         },
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide a database password.')
+          throw new Error('Please provide a database password with no spaces.')
         },
       },
       {
-        type: 'list',
+        type: 'input',
         name: 'trafficPercentage',
         message: 'What percentage of traffic do you want to route to the canary?',
-        choices: ['5%', '10%', '20%'],
-        require: true,
+        validate(input: string) {
+          // TODO: validate with regex
+          if (+input >= 0 && +input <= 100) return true
+
+          throw new Error('Please provide a number between 0 and 100')
+        },
       },
     ])
 
