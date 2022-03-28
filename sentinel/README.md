@@ -16,11 +16,11 @@ oclif example Hello World CLI
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g sentinel-test-command-line-interface
+$ npm install -g @sentinel-paas/sentinel-cli
 $ sentinel COMMAND
 running command...
 $ sentinel (--version)
-sentinel-test-command-line-interface/0.0.13 linux-x64 node-v14.18.0
+@sentinel-paas/sentinel-cli/0.0.0 linux-x64 node-v16.14.2
 $ sentinel --help [COMMAND]
 USAGE
   $ sentinel COMMAND
@@ -33,15 +33,14 @@ USAGE
 * [`sentinel canary promote`](#sentinel-canary-promote)
 * [`sentinel canary rollback`](#sentinel-canary-rollback)
 * [`sentinel canary traffic`](#sentinel-canary-traffic)
+* [`sentinel cluster inspect`](#sentinel-cluster-inspect)
+* [`sentinel cluster scale`](#sentinel-cluster-scale)
 * [`sentinel deploy`](#sentinel-deploy)
 * [`sentinel destroy`](#sentinel-destroy)
 * [`sentinel help [COMMAND]`](#sentinel-help-command)
 * [`sentinel init`](#sentinel-init)
-* [`sentinel inspect inventory`](#sentinel-inspect-inventory)
 * [`sentinel inspect app`](#sentinel-inspect-app)
-* [`sentinel cluster inspect`](#sentinel-cluster-inspect)
-* [`sentinel cluster scale`](#sentinel-cluster-scale)
-* [`sentinel scale app`](#sentinel-scale-app)
+* [`sentinel inspect inventory`](#sentinel-inspect-inventory)
 * [`sentinel plugins`](#sentinel-plugins)
 * [`sentinel plugins:install PLUGIN...`](#sentinel-pluginsinstall-plugin)
 * [`sentinel plugins:inspect PLUGIN...`](#sentinel-pluginsinspect-plugin)
@@ -55,6 +54,8 @@ USAGE
 
 ## `sentinel canary deploy`
 
+Initiates a canary deployment
+
 ```
 USAGE
   $ sentinel canary deploy
@@ -66,9 +67,9 @@ EXAMPLES
   $ sentinel canary deploy
 ```
 
-_See code: [dist/commands/canary/](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/main/sentinel/src/commands/canary/deploy.ts)_
-
 ## `sentinel canary promote`
+
+Promotes the canary version of the application to full production and removes the previous production application
 
 ```
 USAGE
@@ -81,9 +82,9 @@ EXAMPLES
   $ sentinel canary promote
 ```
 
-_See code: [dist/commands/canary/](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/main/sentinel/src/commands/canary/promote.ts)_
-
 ## `sentinel canary rollback`
+
+Removes the canary version of the application and directs all user traffic back to the original production version.
 
 ```
 USAGE
@@ -96,9 +97,9 @@ EXAMPLES
   $ sentinel canary rollback
 ```
 
-_See code: [dist/commands/canary/](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/main/sentinel/src/commands/canary/rollback.ts)_
-
 ## `sentinel canary traffic`
+
+Changes the amount of traffic going to the canary
 
 ```
 USAGE
@@ -111,7 +112,36 @@ EXAMPLES
   $ sentinel canary traffic
 ```
 
-_See code: [dist/commands/canary/](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/main/sentinel/src/commands/canary/traffic.ts)_
+## `sentinel cluster inspect`
+
+This command allows you to obtain information about the cluster.
+
+```
+USAGE
+  $ sentinel cluster inspect
+
+DESCRIPTION
+  This command allows you to obtain information about the cluster.
+
+EXAMPLES
+  $ sentinel cluster inspect
+```
+
+## `sentinel cluster scale`
+
+This command scales your cluster up or down.
+
+```
+USAGE
+  $ sentinel cluster scale
+
+DESCRIPTION
+  This command scales your cluster up or down.
+
+EXAMPLES
+  $ sentinel cluster scale
+```
+
 ## `sentinel deploy`
 
 Deploy your application
@@ -127,7 +157,7 @@ EXAMPLES
   $ sentinel deploy
 ```
 
-_See code: [dist/commands/deploy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/deploy.ts)_
+_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.0/dist/commands/deploy.ts)_
 
 ## `sentinel destroy`
 
@@ -144,24 +174,7 @@ EXAMPLES
   $ sentinel destroy
 ```
 
-_See code: [dist/commands/destroy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/destroy.ts)_
-
-## `sentinel health`
-
-Specify the name of an application and check its health status.
-
-```
-USAGE
-  $ sentinel health
-
-DESCRIPTION
-  Specify the name of an application and check its health status.
-
-EXAMPLES
-  $ sentinel health
-```
-
-_See code: [dist/commands/health.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/health.ts)_
+_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.0/dist/commands/destroy.ts)_
 
 ## `sentinel help [COMMAND]`
 
@@ -185,37 +198,24 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.1
 
 ## `sentinel init`
 
-Initialize Sentinel
+Initialize Sentinel infrastructure
 
 ```
 USAGE
   $ sentinel init
 
 DESCRIPTION
-  Initialize Sentinel
+  Initialize Sentinel infrastructure
 
 EXAMPLES
   $ sentinel init
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/init.ts)_
-
-## `sentinel inspect inventory`
-
-```
-USAGE
-  $ sentinel inspect inventory
-
-DESCRIPTION
-  List all deployed applications
-
-EXAMPLES
-  $ sentinel inspect inventory
-```
-
-_See code: [dist/commands/inventory.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/main/sentinel/src/commands/inspect/inventory.ts)_
+_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.0/dist/commands/init.ts)_
 
 ## `sentinel inspect app`
+
+Provides deployment information on a specific application
 
 ```
 USAGE
@@ -228,53 +228,20 @@ EXAMPLES
   $ sentinel inspect app
 ```
 
-_See code: [dist/commands/inventory.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/main/sentinel/src/commands/inspect/app.ts)_
+## `sentinel inspect inventory`
 
-## `sentinel cluster inspect`
-
-```
-USAGE
-  $ sentinel cluster inspect
-
-DESCRIPTION
-  This command allows you to obtain information about the cluster.
-
-EXAMPLES
-  $ sentinel cluster inspect
-```
-
-_See code: [dist/commands/inventory.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/main/sentinel/src/commands/cluster/inspect.ts)_
-
-## `sentinel cluster scale`
+List all deployed applications
 
 ```
 USAGE
-  $ sentinel cluster scale
+  $ sentinel inspect inventory
 
 DESCRIPTION
-  This command scales your cluster up or down.
+  List all deployed applications
 
 EXAMPLES
-  $ sentinel cluster scale
+  $ sentinel inspect inventory
 ```
-
-_See code: [dist/commands/inventory.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/main/sentinel/src/commands/cluster/scale.ts)_
-
-## `sentinel scale app`
-
-```
-USAGE
-  $ sentinel scale app
-
-DESCRIPTION
-  Scale an application up or down
-
-EXAMPLES
-  $ sentinel scale app
-
-```
-
-_See code: [dist/commands/inventory.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/main/sentinel/src/commands/scale/app.ts)_
 
 ## `sentinel plugins`
 
@@ -508,6 +475,8 @@ DESCRIPTION
 
 ## `sentinel remove app`
 
+Removes an application from production.
+
 ```
 USAGE
   $ sentinel remove app
@@ -516,8 +485,6 @@ DESCRIPTION
   Removes an application from production.
 
 EXAMPLES
-  $ sentinel remove app
+  $ sentinel remove app -a <myapp>
 ```
-
-_See code: [dist/commands/remove.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.13/dist/commands/remove.ts)_
 <!-- commandsstop -->

@@ -1,20 +1,11 @@
-import { json } from 'stream/consumers'
-
-/* eslint-disable max-lines-per-function */
 const axios = require('axios')
 const path = require('path')
-const ipFile = '../../sentinel-ip.txt'
-let url = ''
-const tokenFile = '../../utils/token.txt'
-let token = ''
 const FormData = require('form-data')
-
 const fs = require('fs')
+// const tokenFile = '../../utils/token.txt'
+// let token = ''
 
-//fs.readFile(path.join(__dirname, ipFile), 'utf-8', (err, data) => {
-//  if (err) throw err
-//  url = `http://${data}`
-//})
+let url = ''
 
 // Make sure axios headers are implemented correctly
 const api = {
@@ -35,12 +26,12 @@ const api = {
     await axios.post(`http://localhost:3000/api/apps/${answers.appName}/upload`, form, {
       headers,
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   deployApplication: async (answers) => {
     let data = {
@@ -54,25 +45,19 @@ const api = {
       dbHost: answers.dbHost,
       dbName: answers.dbName,
       dbCreateSchemaOnDeploy: answers.createSchemaOnDeploy,
-      //dbFile: form,
     }
-/*     let form = new FormData()
-    if (answers.dbCreateSchemaOnDeploy) {
-      form.append('app_db', file, dbFileName)
-      form.append('data', new Blob([JSON.stringify(data)]), 'request.json')
-    } */
-
-    let headers = {Authorization: `Bearer ${token}`}
+  
+    let headers = { Authorization: `Bearer ${token}` }
 
     await axios.post('http://localhost:3000/api/apps', data, {
       headers,
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   canaryDeploy: async (answers) => {
     let data = {
@@ -92,12 +77,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   canaryTraffic: async (answers) => {
     let data = {
@@ -109,12 +94,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   promoteCanary: async (answers) => {
     await axios.post(url + `/api/apps/${answers.appName}/promote`, {
@@ -122,12 +107,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   rollbackCanary: async (answers) => {
     await axios.post(url + `/api/apps/${answers.appName}/rollback`, {
@@ -135,12 +120,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   getApps: async () => {
     await axios.get(url + '/api/apps/', {
@@ -148,12 +133,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   getApp: async (answers) => {
     await axios.get(url + `/api/apps/${answers.appName}`, {
@@ -161,12 +146,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   removeApp: async (answers) => {
     await axios.delete(url + `/api/apps/${answers.appName}`, {
@@ -174,12 +159,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   destroyAll: async () => {
     await axios.delete(url + '/api/destroy', {
@@ -187,12 +172,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   scaleCluster: async (answers) => {
     let data = {
@@ -204,12 +189,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   inspectCluster: async (answers) => {
     await axios.get(url + '/api/cluster', {
@@ -217,12 +202,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
   scaleApp: async (answers) => {
     let data = {
@@ -234,27 +219,41 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
-  initializeCluster: async(answers) => {
+  initializeCluster: async () => {
     await axios.post(url + '/api/cluster/initialize', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error.message
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error.message
+      })
   },
+  setURL: async (sentinelConfigPath) => {
+    let sentinelIP = await new Promise((resolve, reject) => {
+      fs.readFile(path.join(`${sentinelConfigPath}/sentinel-ip.txt`), 'utf-8', (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
+    })
+
+    sentinelIP = sentinelIP.replace('\n', '')
+    // FIXME: hard coded port should be 80
+    url = `http://${sentinelIP}:3000`
+  }
 }
 
 export default api
-
