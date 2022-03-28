@@ -18,9 +18,12 @@ export default class Init extends Command {
   public async run(): Promise<void> {
     try {
       let user: string = await this.execute('echo $USER')
-      path = `/home/${user.replace('\n', "")}/.sentinel/config`
+      user = user.replace('\n', '')
+      path = `/home/${user}/.sentinel/config`
 
-      console.log(await this.getConfigFiles());
+      console.log(await this.getConfigScript(user));
+      
+      console.log(await this.executeConfigScript(user))
 
       this.log('Initializing cloud infrastructure. Please stand by.')
 
@@ -44,9 +47,41 @@ export default class Init extends Command {
     }
   }
 
-  private async getConfigFiles(): Promise<void> {
+  private async getConfigScript(user: string): Promise<string> {
+    const scriptPath = `/home/${user}/.sentinel/scripts`
+    return new Promise((resolve, reject) => {
+      spawn('mkdir', ['-p', scriptPath])
+
+      const args = [
+        '-P',
+        `${scriptPath}`,
+        'https://raw.githubusercontent.com/Sentinel-PaaS/cli-configs/main/config.sh'
+      ]
+
+      const configs = spawn('wget', args);
+      configs.stdout.on("data", (data: any) => {
+        console.log(`stdout: ${data}`);
+      });
+
+      configs.stderr.on("data", (data: any) => {
+        console.log(`stderr: ${data}`);
+      });
+
+      configs.on('error', (error: any) => {
+        console.log(`error: ${error.message}`);
+        reject(error.message)
+      });
+
+      configs.on("close", (code: any) => {
+        resolve(`Process exited with code ${code}`)
+      });
+    })
+  }
+
+  private async executeConfigScript(user: string): Promise<string> {
+    const scriptPath = `/home/${user}/.sentinel/scripts`
     return new Promise((resolve: any, reject: any) => {
-      childProcess.exec('chmod +x config.sh && ./config.sh', (err: any, contents: any) => {
+      childProcess.exec(`cd ${scriptPath}/ && chmod +x config.sh && ./config.sh`, (err: any, contents: any) => {
         if (err) {
           reject(err)
           return
@@ -72,7 +107,6 @@ export default class Init extends Command {
 
   private async terraformInit(path: string): Promise<string> {
     return new Promise((resolve, reject) => {
-
       const terraformInit = spawn("terraform", [`-chdir=${path}/terraform`, "init", "-input=false"]);
       terraformInit.stdout.on("data", (data: any) => {
         console.log(`stdout: ${data}`);
