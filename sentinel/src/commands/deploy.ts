@@ -177,31 +177,34 @@ export default class Deploy extends Command {
       },
     ])
 
-    if (finalConfirmation.deployConfirmation && answers.createSchemaOnDeploy) {
-      const filePath = answers.pathToDbFile.split('/')
-      const dbFileName = filePath[filePath.length - 1]
+    //FIXME: There is a bug in this block of code that throws a mysterious error. Further investigation needed
+    
+    // if (finalConfirmation.deployConfirmation && answers.createSchemaOnDeploy) {
+    //   const filePath = answers.pathToDbFile.split('/')
+    //   // const dbFileName = filePath[filePath.length - 1]
 
-      const file = fs.readFileSync('/..'.repeat(numOfFoldersToGetToHome) + '/' + answers.pathToDbFile, 'utf-8', (err: any, data: any) => {
-        if (err) throw err
-        // console.log(data)
-      })
-      console.log('Deploying application...')
-      const sqlResponse: any = await api.uploadSQL(answers, file, dbFileName)
-      const response: any = await api.deployApplication(answers)
-      console.log(response)
-      if (response.status === 200 && sqlResponse.status === 200) {
-        this.log('Make sure your host name points to this ip address: ' + response.data)
-      } else {
-        this.error('An error occurred')
-      }
-    } else if (finalConfirmation.deployConfirmation && (!answers.hasDatabase || !answers.createSchemaOnDeploy)) {
-      //console.log('Deploying application...')
-      //let response = await api.deployApplication(answers)
-      // if (response.data.status === 200) {
-      //   this.log("Make sure your host name points to this ip address: " response.data.ipAddress)
-      // } else {
-      //    this.error("An error occurred")
-      // }
-    }
+    //   // const file = fs.readFileSync('/..'.repeat(numOfFoldersToGetToHome) + '/' + answers.pathToDbFile, 'utf-8', (err: any, data: any) => {
+    //   //   if (err) throw err
+    //   //   // console.log(data)
+    //   // })
+    //   let file = ""
+    //   console.log('Deploying application...')
+    //   // const sqlResponse: any = await api.uploadSQL(answers, file, dbFileName)
+    //   const response: any = await api.deployApplication(answers)
+    //   console.log(response)
+    //   // if (response.status === 200 && sqlResponse.status === 200) {
+    //   //   this.log('Make sure your host name points to this ip address: ' + response.data)
+    //   // } else {
+    //   //   this.error('An error occurred')
+    //   // }
+    // } else if (finalConfirmation.deployConfirmation && (!answers.hasDatabase || !answers.createSchemaOnDeploy)) {
+    //   //console.log('Deploying application...')
+    //   //let response = await api.deployApplication(answers)
+    //   // if (response.data.status === 200) {
+    //   //   this.log("Make sure your host name points to this ip address: " response.data.ipAddress)
+    //   // } else {
+    //   //    this.error("An error occurred")
+    //   // }
+    // }
   }
 }
