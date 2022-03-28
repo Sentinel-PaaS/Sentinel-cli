@@ -16,11 +16,11 @@ oclif example Hello World CLI
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g sentinel-test-command-line-interface
+$ npm install -g @sentinel-paas/sentinel-cli
 $ sentinel COMMAND
 running command...
 $ sentinel (--version)
-sentinel-test-command-line-interface/0.0.15 linux-x64 node-v16.14.2
+@sentinel-paas/sentinel-cli/0.0.0 linux-x64 node-v16.14.2
 $ sentinel --help [COMMAND]
 USAGE
   $ sentinel COMMAND
@@ -157,7 +157,7 @@ EXAMPLES
   $ sentinel deploy
 ```
 
-_See code: [dist/commands/deploy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.15/dist/commands/deploy.ts)_
+_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.0/dist/commands/deploy.ts)_
 
 ## `sentinel destroy`
 
@@ -174,7 +174,7 @@ EXAMPLES
   $ sentinel destroy
 ```
 
-_See code: [dist/commands/destroy.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.15/dist/commands/destroy.ts)_
+_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.0/dist/commands/destroy.ts)_
 
 ## `sentinel help [COMMAND]`
 
@@ -211,7 +211,7 @@ EXAMPLES
   $ sentinel init
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/sentinel/sentinel-paas/blob/v0.0.15/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.0/dist/commands/init.ts)_
 
 ## `sentinel inspect app`
 
