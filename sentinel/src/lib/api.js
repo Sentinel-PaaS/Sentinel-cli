@@ -227,17 +227,19 @@ const api = {
       })
   },
   initializeCluster: async () => {
-    await axios.post(url + '/api/cluster/initialize', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    console.log("Mock request to initialize cluster: ", url);
+    // TODO: initialize the cluster
+    // await axios.post(url + '/api/cluster/initialize', {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // })
+    //   .then(response => {
+    //     return response
+    //   })
+    //   .catch(error => {
+    //     return error.message
+    //   })
   },
   setURL: async (sentinelConfigPath) => {
     let sentinelIP = await new Promise((resolve, reject) => {
