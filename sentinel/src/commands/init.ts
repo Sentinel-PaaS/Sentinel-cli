@@ -1,6 +1,8 @@
 import { Command } from '@oclif/core'
 const childProcess = require('child_process')
 const { spawn } = require('child_process')
+const fs = require('fs')
+import generateAuthToken from '../lib/generateToken'
 import api from '../lib/api.js'
 let path = ''
 
@@ -31,14 +33,15 @@ export default class Init extends Command {
 
       await this.terraformApply(path)
 
+      this.saveAuthToken(path)
+
+      await api.setConfigs(path)
+
       await this.executeAnsible(path)
 
       await api.initializeCluster()
 
       this.log('Successfully initialized cloud infrastructure')
-
-      // TODO: prompt user to create password that will be used to authenticate subsequent requests
-      // POST to our api endpoint
     } catch (error) {
       console.log(error)
       this.error('An error ocurred while initializing your infrastructure.')
@@ -184,5 +187,13 @@ export default class Init extends Command {
         resolve(`Process exited with code ${code}`)
       });
     })
+  }
+  private saveAuthToken(path: string): void {
+    const token = generateAuthToken()
+    try {
+     fs.writeFileSync(`${path}/token.txt`, token) 
+    } catch (err) {
+      throw new Error('Could not save auth token') 
+    }
   }
 }

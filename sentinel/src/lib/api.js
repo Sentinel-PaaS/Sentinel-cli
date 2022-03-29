@@ -2,12 +2,11 @@ const axios = require('axios')
 const path = require('path')
 const FormData = require('form-data')
 const fs = require('fs')
-// const tokenFile = '../../utils/token.txt'
-// let token = ''
+// const tokenFile = '/home/$USER/.sentinel/config'
 
+let token = ''
 let url = ''
 
-// Make sure axios headers are implemented correctly
 const api = {
   readToken: async () => {
     fs.readFile(path.join(__dirname, tokenFile), 'utf-8', (err, data) => {
@@ -23,7 +22,7 @@ const api = {
       Authorization: `Bearer ${token}`,
     }
 
-    await axios.post(`http://localhost:3000/api/apps/${answers.appName}/upload`, form, {
+    await axios.post(url + `/api/apps/${answers.appName}/upload`, form, {
       headers,
     })
       .then(response => {
@@ -49,7 +48,7 @@ const api = {
   
     let headers = { Authorization: `Bearer ${token}` }
 
-    await axios.post('http://localhost:3000/api/apps', data, {
+    await axios.post(url + '/api/apps', data, {
       headers,
     })
       .then(response => {
@@ -241,9 +240,19 @@ const api = {
     //     return error.message
     //   })
   },
-  setURL: async (sentinelConfigPath) => {
+  setConfigs: async (sentinelConfigPath) => {
     let sentinelIP = await new Promise((resolve, reject) => {
       fs.readFile(path.join(`${sentinelConfigPath}/sentinel-ip.txt`), 'utf-8', (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
+    })
+
+    token = await new Promise((resolve, reject) => {
+      fs.readFile(path.join(`${sentinelConfigPath}/token.txt`), 'utf-8', (err, data) => {
         if (err) {
           reject(err)
         } else {
