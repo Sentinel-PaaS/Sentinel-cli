@@ -20,7 +20,7 @@ $ npm install -g @sentinel-paas/sentinel-cli
 $ sentinel COMMAND
 running command...
 $ sentinel (--version)
-@sentinel-paas/sentinel-cli/0.0.0 linux-x64 node-v16.14.2
+@sentinel-paas/sentinel-cli/0.0.1 linux-x64 node-v16.14.2
 $ sentinel --help [COMMAND]
 USAGE
   $ sentinel COMMAND
@@ -51,6 +51,7 @@ USAGE
 * [`sentinel plugins:uninstall PLUGIN...`](#sentinel-pluginsuninstall-plugin-2)
 * [`sentinel plugins update`](#sentinel-plugins-update)
 * [`sentinel remove app`](#sentinel-remove-app)
+* [`sentinel scale app`](#sentinel-scale-app)
 
 ## `sentinel canary deploy`
 
@@ -157,7 +158,7 @@ EXAMPLES
   $ sentinel deploy
 ```
 
-_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.0/dist/commands/deploy.ts)_
+_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.1/dist/commands/deploy.ts)_
 
 ## `sentinel destroy`
 
@@ -174,7 +175,7 @@ EXAMPLES
   $ sentinel destroy
 ```
 
-_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.0/dist/commands/destroy.ts)_
+_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.1/dist/commands/destroy.ts)_
 
 ## `sentinel help [COMMAND]`
 
@@ -211,7 +212,7 @@ EXAMPLES
   $ sentinel init
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.0/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.1/dist/commands/init.ts)_
 
 ## `sentinel inspect app`
 
@@ -485,6 +486,21 @@ DESCRIPTION
   Removes an application from production.
 
 EXAMPLES
-  $ sentinel remove app -a <myapp>
+  $ sentinel remove app
+```
+
+## `sentinel scale app`
+
+Scale an application up or down
+
+```
+USAGE
+  $ sentinel scale app
+
+DESCRIPTION
+  Scale an application up or down
+
+EXAMPLES
+  $ sentinel scale app
 ```
 <!-- commandsstop -->

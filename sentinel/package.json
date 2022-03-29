@@ -1,6 +1,6 @@
 {
   "name": "@sentinel-paas/sentinel-cli",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Sentinel CLI",
   "author": "Brendan Leal, Michael Fatigati, Samantha Lipari, Drew Sessler",
   "bin": {
