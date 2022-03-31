@@ -1,4 +1,5 @@
-import {Command, Flags} from '@oclif/core'
+import {Command} from '@oclif/core'
+import api from '../../lib/api.js'
 
 export default class Inspect extends Command {
   static description = 'This command allows you to obtain information about the cluster.'
@@ -8,13 +9,8 @@ export default class Inspect extends Command {
   ]
 
   public async run(): Promise<void> {
-    console.log('Getting cluster information...')
-    //let response = await api.inspectCluster()
-    //let response = api.getClusterInfo()
-    //if (response.data.status === 200) {
-    //  this.log('response.data')
-    //} else {
-    //    this.log('No cluster information available')
-    //}
+    this.log('Getting cluster information...')
+    const response: any = await api.inspectCluster()
+    this.log(response.data)
   }
 }

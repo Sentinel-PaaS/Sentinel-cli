@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import {Command, Flags} from '@oclif/core'
 const inquirer = require('inquirer')
-
+import api from "../../lib/api.js";
 export default class Promote extends Command {
   static description = 'Promotes the canary version of the application to full production and removes the previous production application'
 
@@ -10,7 +10,7 @@ export default class Promote extends Command {
   ]
 
   public async run(): Promise<void> {
-    let answers = await inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: 'input',
         name: 'appName',
@@ -19,7 +19,7 @@ export default class Promote extends Command {
           // TODO: validate with regex
           if (input.length > 0) return true
 
-          throw new Error('Please provide an application name.')
+          throw new Error('Please provide an application name with no spaces.')
         },
       },
       {
@@ -30,13 +30,9 @@ export default class Promote extends Command {
       },
     ])
     if (answers.promote) {
-      //let response = api.promoteCanary(answers)
-      //if (response.data.status === 200) {
-      //  this.log('The canary has been promoted to production for answers.appName')
-      //} else {
-      //    this.log('There is no canary for this application')
-      //}
-      console.log('Promoting canary..')
+      this.log('Promoting canary..')
+      const response: any = await api.promoteCanary(answers)
+      this.log(response.data)
     } else {
       console.log('Canceling canary promotion..')
     }

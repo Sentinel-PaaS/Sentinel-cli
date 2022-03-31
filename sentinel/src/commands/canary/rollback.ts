@@ -1,6 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import {Command, Flags} from '@oclif/core'
 const inquirer = require('inquirer')
+import api from '../../lib/api.js'
 
 export default class Rollback extends Command {
   static description = 'Removes the canary version of the application and directs all user traffic back to the original production version.'
@@ -10,16 +11,16 @@ export default class Rollback extends Command {
   ]
 
   public async run(): Promise<void> {
-    let answers = await inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: 'input',
         name: 'appName',
         message: 'What is the name of your application?',
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide an application name.')
+          throw new Error('Please provide an application name with no spaces.')
         },
       },
       {
@@ -30,15 +31,11 @@ export default class Rollback extends Command {
       },
     ])
     if (answers.rollback) {
-      //let response = api.rollbackCanary(answers)
-      //if (response.data.status === 200) {
-      //  this.log('The canary deployment has been rolled back for answers.appName')
-      //} else {
-      //    this.log('There is no canary for this application')
-      //}
-      console.log('Removing canary version of the application...')
+      this.log('Removing canary version of the application...')
+      const response: any = await api.rollbackCanary(answers)
+      this.log(response.data)
     } else {
-      console.log('Canceling rollback of canary...')
+      this.log('Canceling rollback of canary...')
     }
   }
 }

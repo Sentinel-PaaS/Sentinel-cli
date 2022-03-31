@@ -1,5 +1,6 @@
 import {Command} from '@oclif/core'
 const inquirer = require('inquirer')
+import api from '../../lib/api'
 
 export default class App extends Command {
   static description = 'Removes an application from production.'
@@ -8,8 +9,7 @@ export default class App extends Command {
     '<%= config.bin %> <%= command.id %>',
   ]
   public async run(): Promise<void> {
-
-    let answers = await inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: 'input',
         name: 'appName',
@@ -17,7 +17,7 @@ export default class App extends Command {
         validate(input: string) {
           // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
-          throw new Error('Please provide an application name.')
+          throw new Error('Please provide an application name with no spaces.')
         },
       },
       {
@@ -28,13 +28,10 @@ export default class App extends Command {
       },
     ])
 
-    //if (answers.removeApp) {
-    //  // let response = await api.removeApp(answers)
-    //  if (response.data.status === 200) {
-    //    this.log(answers.app + ' has been removed from production')
-    //  } else {
-    //    this.error('Please verify you entered the correct application name')
-    //  }
-    //}
+    if (answers.removeApp) {
+      this.log(`Removing ${answers.appName} from production...`)
+      const response: any = await api.removeApp(answers)
+      this.log(response.data)
+    }
   }
 }

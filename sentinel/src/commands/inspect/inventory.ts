@@ -1,5 +1,5 @@
-import {Command, Flags} from '@oclif/core'
-import api from '../../lib/api';
+import {Command} from '@oclif/core'
+import api from '../../lib/api'
 
 export default class Inventory extends Command {
   static description = 'List all deployed applications'
@@ -9,8 +9,10 @@ export default class Inventory extends Command {
   ]
 
   public async run(): Promise<void> {
-    // const response = await api.getApps()
+    this.log('Getting inventory...')
+    const response: any = await api.getApps()
+    this.log(response.data)
     // TODO: find a way to neatly display info
-    this.log("List of deployed applications")
+    //this.log("List of deployed applications")
   }
 }
