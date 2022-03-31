@@ -1,6 +1,7 @@
 /* eslint-disable max-lines-per-function */
-import {Command, Flags} from '@oclif/core'
+import {Command} from '@oclif/core'
 const inquirer = require('inquirer')
+import api from '../../lib/api'
 
 export default class App extends Command {
   static description = 'Scale an application up or down'
@@ -10,16 +11,16 @@ export default class App extends Command {
   ]
 
   public async run(): Promise<void> {
-    let answers = await inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: 'input',
         name: 'appName',
         message: 'What is the name of your application?',
         validate(input: string) {
           // TODO: validate with regex
-          if (input.length > 0) return true
+          if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide an application name.')
+          throw new Error('Please provide an application name with no spaces.')
         },
       },
       {
@@ -33,13 +34,18 @@ export default class App extends Command {
           throw new Error('Please provide a number greater than 0 to scale your application to.')
         },
       },
+      {
+        type: 'confirm',
+        name: 'scaleApp',
+        message: 'Are you sure you want to scale this application?',
+        required: true,
+      },
     ])
-    //let response = api.scaleApp(answers)
-    //if (response.data.status === 200) {
-    //  this.log('Your application has been scaled to: answers.scaleNumber')
-    //} else {
-    //  this.error('Please verify you entered the correct application name')
-    //}
-    console.log(JSON.stringify(answers))
+
+    if (answers.scaleApp) {
+      this.log(`Scaling ${answers.appName} to ${answers.scaleNumber}...`)
+      const response: any = await api.scaleApp(answers)
+      this.log(response.data)
+    }
   }
 }

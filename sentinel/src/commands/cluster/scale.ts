@@ -1,5 +1,6 @@
-import {Command, Flags} from '@oclif/core'
+import {Command} from '@oclif/core'
 const inquirer = require('inquirer')
+import api from '../../lib/api.js'
 
 export default class Scale extends Command {
   static description = 'This command scales your cluster up or down.'
@@ -9,7 +10,7 @@ export default class Scale extends Command {
   ]
 
   public async run(): Promise<void> {
-    let answers = await inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: 'list',
         name: 'scaleCluster',
@@ -20,13 +21,9 @@ export default class Scale extends Command {
     ])
 
     if (answers.scaleCluster !== 'cancel') {
-      console.log(JSON.stringify(answers))
-      //let response = api.scaleCluster(answers)
-      //if (response.data.status === 200) {
-      //  this.log('The cluster has been scaled ${answers.scaleCluster}')
-      //} else {
-      //    this.log('Unable to scale at this time. Try again later.')
-      //}
+      this.log(`Scaling cluster ${answers.scaleCluster}...`)
+      const response: any = await api.scaleCluster(answers)
+      this.log(response.data)
     } else {
       console.log('Canceling cluster scale')
     }
