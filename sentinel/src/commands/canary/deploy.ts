@@ -2,8 +2,7 @@
 import { Command, Flags } from '@oclif/core'
 const inquirer = require('inquirer')
 //const api = require('../lib/api.ts')
-// import { api } from "../lib/api.js";
-
+import api from "../../lib/api.js";
 
 export default class Deploy extends Command {
   static description = 'Initiates a canary deployment'
@@ -30,8 +29,6 @@ export default class Deploy extends Command {
         name: 'appImagePort',
         message: 'If your production application image exposes a port, please specify the port number: ',
         validate(input: string) {
-          // TODO: validate with regex
-          //Check that it is a valid digit
           if (input.length === 0 || +input > 0) return true
           throw new Error('Please provide a valid port number.')
         },
@@ -51,7 +48,6 @@ export default class Deploy extends Command {
         name: 'canaryImagePort',
         message: 'If your canary image exposes a port, please specify the port number: ',
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length === 0 || +input > 0) return true
           throw new Error('Please provide a valid port number.')
         },
@@ -61,7 +57,6 @@ export default class Deploy extends Command {
         name: 'hostName',
         message: 'What is the host name of your application? ex: helloworld.com',
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a host name.')
@@ -72,7 +67,6 @@ export default class Deploy extends Command {
         name: 'appName',
         message: 'What is the name of your application?',
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
           throw new Error('Please provide an application name with no spaces.')
         },
@@ -82,9 +76,6 @@ export default class Deploy extends Command {
         name: 'hasDatabase',
         message: 'Does your application use a postgres database?',
         default: false,
-        when(answers: any) {
-          return hasDatabase(answers)
-        },
       },
       {
         type: 'input',
@@ -94,7 +85,6 @@ export default class Deploy extends Command {
           return answers.hasDatabase
         },
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a database user name with no spaces.')
@@ -108,7 +98,6 @@ export default class Deploy extends Command {
           return answers.hasDatabase
         },
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a database password with no spaces.')
@@ -116,22 +105,43 @@ export default class Deploy extends Command {
       },
       {
         type: 'input',
+        name: 'dbHost',
+        message: 'Please enter the database host name: ',
+        when(answers: any) {
+          return answers.hasDatabase
+        },
+        validate(input: string) {
+          // TODO: validate with regex
+          if (input.length > 0 && !input.includes(' ')) return true
+
+          throw new Error('Please provide a database host with no spaces.')
+        },
+      },
+      {
+        type: 'input',
+        name: 'dbName',
+        message: 'Please enter the name of the database: ',
+        when(answers: any) {
+          return answers.hasDatabase
+        },
+        validate(input: string) {
+          // TODO: validate with regex
+          if (input.length > 0 && !input.includes(' ')) return true
+
+          throw new Error('Please provide a database name with no spaces.')
+        },
+      },
+      {
+        type: 'input',
         name: 'trafficPercentage',
         message: 'What percentage of traffic do you want to route to the canary?',
         validate(input: string) {
-          // TODO: validate with regex
           if (+input >= 0 && +input <= 100) return true
 
           throw new Error('Please provide a number between 0 and 100')
         },
       },
     ])
-
-    function hasDatabase(answers: any) {
-      return function () {
-        return [answers.dbUserName, answers.dbPassword]
-      }
-    }
 
     const finalConfirmation = await inquirer.prompt([
       {
@@ -146,22 +156,19 @@ export default class Deploy extends Command {
           Host Name: ${answers.hostName}
           Application Has Database: ${answers.hasDatabase}
           Database Username: ${answers.dbUsername || 'N/A'}
-          Database Password: ${answers.dbPassword || 'N/A'},
+          Database Password: ${answers.dbPassword || 'N/A'}
+          Database Name: ${answers.dbName || 'N/A'}
+          Database Host: ${answers.dbHost || 'N/A'}
           Percentage of traffic routed to canary: ${answers.trafficPercentage}`,
       },
     ])
   
     if (finalConfirmation.deployConfirmation) {
       this.log('Deploying canary...')
-      //let response = api.canaryDeploy(answers)
-      //if (response.data.status === 200) {
-      //  this.log('The canary has been deployed')
-      //} else {
-      //    this.log('Something went wrong')
-      //}
+      const response: any = await api.canaryDeploy(answers)
+      this.log(response.data)
     } else {
       this.log('Canceling canary deployment...')
     }
-    //api.canaryDeploy(answers)
   }
 }

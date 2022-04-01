@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 const axios = require('axios')
 const path = require('path')
 const FormData = require('form-data')
@@ -22,15 +23,16 @@ const api = {
       Authorization: `Bearer ${token}`,
     }
 
-    await axios.post(url + `/api/apps/${answers.appName}/upload`, form, {
+    const response = await axios.post(url + `/api/apps/${answers.appName}/upload`, form, {
       headers,
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   deployApplication: async (answers) => {
     let data = {
@@ -45,18 +47,19 @@ const api = {
       dbName: answers.dbName,
       dbCreateSchemaOnDeploy: answers.createSchemaOnDeploy,
     }
+  
+    let headers = {Authorization: `Bearer ${token}`}
 
-    let headers = { Authorization: `Bearer ${token}` }
-
-    await axios.post(url + '/api/apps', data, {
+    const response = await axios.post(url + '/api/apps', data, {
       headers,
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   canaryDeploy: async (answers) => {
     let data = {
@@ -68,162 +71,176 @@ const api = {
       appHasDatabase: answers.hasDatabase,
       dbUsername: answers.dbUsername,
       dbPassword: answers.dbPassword,
+      dbName: answers.dbName,
+      dbHost: answers.dbHost,
       canaryWeight: answers.trafficPercentage,
     }
 
-    await axios.post(url + `/api/apps/${answers.appName}/canary`, data, {
+    const response = await axios.post(url + `/api/apps/${answers.appName}/canary`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+
+    return response
   },
   canaryTraffic: async (answers) => {
     let data = {
       newWeight: answers.trafficPercentage,
     }
 
-    await axios.put(url + `/api/apps/${answers.appName}/canary`, data, {
+    const response = await axios.put(url + `/api/apps/${answers.appName}/canary`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   promoteCanary: async (answers) => {
-    await axios.post(url + `/api/apps/${answers.appName}/promote`, {
+    const response = await axios.post(url + `/api/apps/${answers.appName}/promote`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   rollbackCanary: async (answers) => {
-    await axios.post(url + `/api/apps/${answers.appName}/rollback`, {
+    const response = await axios.post(url + `/api/apps/${answers.appName}/rollback`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   getApps: async () => {
-    await axios.get(url + '/api/apps/', {
+    const response = await axios.get(url + '/api/apps/', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   getApp: async (answers) => {
-    await axios.get(url + `/api/apps/${answers.appName}`, {
+    const response = await axios.get(url + `/api/apps/${answers.appName}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   removeApp: async (answers) => {
-    await axios.delete(url + `/api/apps/${answers.appName}`, {
+    const response = await axios.delete(url + `/api/apps/${answers.appName}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   destroyAll: async () => {
-    await axios.delete(url + '/api/destroy', {
+    const response = await axios.delete(url + '/api/destroy', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   scaleCluster: async (answers) => {
     let data = {
       scaleCluster: answers.scaleCluster,
     }
 
-    await axios.put(url + '/api/cluster/scale', data, {
+    const response = await axios.put(url + '/api/cluster/scale', data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   inspectCluster: async (answers) => {
-    await axios.get(url + '/api/cluster', {
+    const response = await axios.get(url + '/api/cluster', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   scaleApp: async (answers) => {
     let data = {
       scaleNumber: answers.scaleNumber,
     }
 
-    await axios.put(url + `/api/apps/${answers.appName}/scale`, data, {
+    const response = await axios.put(url + `/api/apps/${answers.appName}/scale`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error.message
-      })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
   },
   initializeCluster: async () => {
     await axios.post(url + '/api/cluster/initialize')

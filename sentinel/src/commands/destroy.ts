@@ -2,6 +2,7 @@
 import {Command} from '@oclif/core'
 const inquirer = require('inquirer')
 const childProcess = require('child_process')
+import api from '../lib/api.js'
 
 export default class Destroy extends Command {
   static description = 'Destroy the entire Sentinel infrastructure and all of your applications.'
@@ -11,7 +12,7 @@ export default class Destroy extends Command {
   ]
 
   public async run(): Promise<void> {
-    let answers = await inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: 'confirm',
         name: 'destroyAll',
@@ -23,7 +24,7 @@ export default class Destroy extends Command {
     if (answers.destroyAll) {
       this.log('Tearing down your applications and Sentinel, please wait this may take a few minutes.')
 
-      // let response = await api.destroyAll()
+      const response = await api.destroyAll()
       if (true/*response.data.status === 200*/) {
         const value = await execute('./sentinel_destroy.sh')
 

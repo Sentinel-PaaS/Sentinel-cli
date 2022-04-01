@@ -1,5 +1,6 @@
-import {Command, Flags} from '@oclif/core'
+import {Command} from '@oclif/core'
 const inquirer = require('inquirer')
+import api from '../../lib/api.js'
 
 export default class App extends Command {
   static description = 'Provides deployment information on a specific application'
@@ -9,25 +10,20 @@ export default class App extends Command {
   ]
 
   public async run(): Promise<void> {
-    let answers = await inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: 'input',
         name: 'appName',
         message: 'What is the name of your application?',
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide an application name with no spaces.')
         },
       },
     ])
-    //let response = api.getApp(answers)
-    //if (response.data.status === 200) {
-    //  this.log('App information: reponse.data.body')
-    //} else {
-    //  this.error('Please verify you entered the correct application name')
-    //}
-    console.log(JSON.stringify(answers))
+    this.log(`Getting app information for ${answers.appName}...`)
+    const response: any = await api.getApp(answers)
+    this.log(response.data)
   }
 }

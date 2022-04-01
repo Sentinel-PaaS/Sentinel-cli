@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines-per-function */
-import { Command, Flags } from '@oclif/core'
+import {Command} from '@oclif/core'
 const inquirer = require('inquirer')
 const inquirerFilePath = require('inquirer-file-path')
 const fs = require('fs')
@@ -65,9 +65,6 @@ export default class Deploy extends Command {
         name: 'hasDatabase',
         message: 'Does your application use a postgres database?',
         default: false,
-        when(answers: any) {
-          return hasDatabase(answers)
-        },
       },
       {
         type: 'input',
@@ -77,7 +74,6 @@ export default class Deploy extends Command {
           return answers.hasDatabase
         },
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a database user name with no spaces.')
@@ -91,7 +87,6 @@ export default class Deploy extends Command {
           return answers.hasDatabase
         },
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a database password with no spaces.')
@@ -105,7 +100,6 @@ export default class Deploy extends Command {
           return answers.hasDatabase
         },
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a database host with no spaces.')
@@ -119,7 +113,6 @@ export default class Deploy extends Command {
           return answers.hasDatabase
         },
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a database name with no spaces.')
@@ -151,13 +144,6 @@ export default class Deploy extends Command {
       },
     ])
 
-    // eslint-disable-next-line unicorn/consistent-function-scoping
-    function hasDatabase(answers: any) {
-      return function () {
-        return [answers.dbUserName, answers.dbPassword, answers.createSchemaOnDeploy]
-      }
-    }
-
     const finalConfirmation = await inquirer.prompt([
       {
         type: 'confirm',
@@ -169,10 +155,10 @@ export default class Deploy extends Command {
           Host Name: ${answers.hostName}
           Application Has Database: ${answers.hasDatabase}
           Database Username: ${answers.dbUsername || 'N/A'}
-          Database Password: ${answers.dbPassword || 'N/A'},
-          Database Name: ${answers.dbName || 'N/A'},
-          Database Host: ${answers.dbHost || 'N/A'},
-          Create schema on deploy: ${answers.createSchemaOnDeploy || 'N/A'},
+          Database Password: ${answers.dbPassword || 'N/A'}
+          Database Name: ${answers.dbName || 'N/A'}
+          Database Host: ${answers.dbHost || 'N/A'}
+          Create schema on deploy: ${answers.createSchemaOnDeploy || 'N/A'}
           Path to SQL File: ${answers.pathToDbFile || 'N/A'}`,
       },
     ])
@@ -185,23 +171,16 @@ export default class Deploy extends Command {
         if (err) throw err
         console.log(data)
       })
-      console.log('Deploying application...')
+
+      this.log('Deploying application...')
       const sqlResponse: any = await api.uploadSQL(answers, file, dbFileName)
       const response: any = await api.deployApplication(answers)
-      console.log(response)
-      if (response.status === 200 && sqlResponse.status === 200) {
-        this.log('Make sure your host name points to this ip address: ' + response.data)
-      } else {
-        this.error('An error occurred')
-      }
+      this.log(sqlResponse.data)
+      this.log(response.data)
     } else if (finalConfirmation.deployConfirmation && (!answers.hasDatabase || !answers.createSchemaOnDeploy)) {
-      console.log('Deploying application...')
-      let response = await api.deployApplication(answers)
-      // if (response.data.status === 200) {
-      //   this.log("Make sure your host name points to this ip address: " response.data.ipAddress)
-      // } else {
-      //   this.error("An error occurred")
-      // }
+      this.log('Deploying application...')
+      const response = await api.deployApplication(answers)
+      this.log(response.data)
     }
   }
 }
