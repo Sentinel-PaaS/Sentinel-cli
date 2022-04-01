@@ -242,6 +242,20 @@ const api = {
     })
     return response
   },
+  getLogs: async (answers) => {
+    const response = await axios.get(url + `/api/apps/${answers.appName}/logs`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      return error
+    })
+    return response
+  },
   initializeCluster: async () => {
     console.log("Mock request to initialize cluster: ", url);
     // TODO: initialize the cluster
