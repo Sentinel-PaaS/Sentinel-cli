@@ -45,7 +45,7 @@ const api = {
       dbName: answers.dbName,
       dbCreateSchemaOnDeploy: answers.createSchemaOnDeploy,
     }
-  
+
     let headers = { Authorization: `Bearer ${token}` }
 
     await axios.post(url + '/api/apps', data, {
@@ -226,19 +226,7 @@ const api = {
       })
   },
   initializeCluster: async () => {
-    console.log("Mock request to initialize cluster: ", url);
-    // TODO: initialize the cluster
-    // await axios.post(url + '/api/cluster/initialize', {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // })
-    //   .then(response => {
-    //     return response
-    //   })
-    //   .catch(error => {
-    //     return error.message
-    //   })
+    await axios.post(url + '/api/cluster/initialize')
   },
   setConfigs: async (sentinelConfigPath) => {
     let sentinelIP = await new Promise((resolve, reject) => {
@@ -262,8 +250,7 @@ const api = {
     })
 
     sentinelIP = sentinelIP.replace('\n', '')
-    // FIXME: hard coded port should be 80
-    url = `http://${sentinelIP}:3000`
+    url = `http://${sentinelIP}:80`
   }
 }
 
