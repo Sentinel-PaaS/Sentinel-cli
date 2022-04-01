@@ -26,12 +26,12 @@ const api = {
     const response = await axios.post(url + `/api/apps/${answers.appName}/upload`, form, {
       headers,
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   deployApplication: async (answers) => {
@@ -47,18 +47,18 @@ const api = {
       dbName: answers.dbName,
       dbCreateSchemaOnDeploy: answers.createSchemaOnDeploy,
     }
-  
-    let headers = {Authorization: `Bearer ${token}`}
+
+    let headers = { Authorization: `Bearer ${token}` }
 
     const response = await axios.post(url + '/api/apps', data, {
       headers,
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   canaryDeploy: async (answers) => {
@@ -81,12 +81,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
 
     return response
   },
@@ -100,12 +100,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   promoteCanary: async (answers) => {
@@ -114,12 +114,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   rollbackCanary: async (answers) => {
@@ -128,12 +128,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   getApps: async () => {
@@ -142,12 +142,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   getApp: async (answers) => {
@@ -156,12 +156,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   removeApp: async (answers) => {
@@ -170,27 +170,32 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   destroyAll: async () => {
-    const response = await axios.delete(url + '/api/destroy', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then(response => {
+    try {
+      const response = await axios.delete(url + '/api/destroy', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      })
       return response
-    })
-    .catch(error => {
-      return error
-    })
-    return response
+    } catch (error) {
+      console.log("Error when requesting to destroy", error);
+    }
+    // })
+    //   .then(response => {
+    //     console.log(response);
+    //     return response
+    //   })
+    //   .catch(error => {
+    //     return error
   },
   scaleCluster: async (answers) => {
     let data = {
@@ -202,12 +207,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   inspectCluster: async (answers) => {
@@ -216,12 +221,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   scaleApp: async (answers) => {
@@ -234,12 +239,12 @@ const api = {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      return error
-    })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        return error
+      })
     return response
   },
   initializeCluster: async () => {
@@ -268,6 +273,7 @@ const api = {
 
     sentinelIP = sentinelIP.replace('\n', '')
     url = `http://${sentinelIP}:80`
+    console.log("url set: ", url);
   }
 }
 

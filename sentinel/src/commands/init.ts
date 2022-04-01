@@ -39,6 +39,8 @@ export default class Init extends Command {
 
       await this.executeAnsible(path)
 
+      this.log('Almost done, just a few more minutes.')
+
       await api.initializeCluster()
 
       this.log('Successfully initialized cloud infrastructure')
