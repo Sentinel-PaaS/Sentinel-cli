@@ -151,8 +151,6 @@ export default class Init extends Command {
   }
 
   private async executeAnsible(path: string): Promise<string> {
-    // console.log(await this.execute('cd /home/$USER/.sentinel/config/ansible && ansible-playbook -i ./inventory/hosts playbook.yml --fork 1'))
-
     return new Promise((resolve, reject) => {
       const args = [
         "-i",
