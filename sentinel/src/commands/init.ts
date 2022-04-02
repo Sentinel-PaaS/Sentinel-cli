@@ -41,7 +41,7 @@ export default class Init extends Command {
 
       this.log('Almost done, just a few more minutes.')
 
-      // await api.initializeCluster(userEmail)
+      await api.initializeCluster(userEmail)
 
       this.log('Successfully initialized cloud infrastructure')
     } catch (error) {
@@ -56,7 +56,7 @@ export default class Init extends Command {
         {
           type: "input",
           name: "email",
-          message: "Your application will automatically be configured with HTTPS using Let's Encrypt.\nAll we need from you is an email address so that we can create the certificate.\nPlease enter it below or see our documentation for more info.\nYour Email: "
+          message: "Your applications will automatically be configured with HTTPS using Let's Encrypt.\nAll we need from you is an email address so that we can create the certificates.\nPlease enter it below or see our documentation for more info.\nYour Email: "
         }
       )
       return email
