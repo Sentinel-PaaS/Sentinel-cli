@@ -1,4 +1,4 @@
-import {Command} from '@oclif/core'
+import { Command } from '@oclif/core'
 const inquirer = require('inquirer')
 import api from '../../lib/api.js'
 
@@ -26,7 +26,21 @@ export default class App extends Command {
     try {
       this.log(`Getting app information for ${answers.appName}...`)
       const response: any = await api.getApp(answers)
-      this.log(response.data)
+      let message = response.data.message
+      let serviceInfo = response.data.data
+      this.log(message + '\n')
+      this.log(`Application Has Canary: ${response.data.hasCanary}\n`)
+      serviceInfo.forEach((service: any) => {
+        this.log(`Service Name: ${service.serviceName}`)
+        this.log(`Service Replicas: ${service.serviceReplicas}`)
+        this.log(`Service Tasks:\n `)
+        service.servicesTasks.forEach((task: any) => {
+          this.log(`\tTask Status: ${task.taskStatus}`)
+          this.log(`\tTask Status Timestamp: ${task.taskStatusTimestamp}`)
+          this.log(`\tTask Slot: ${task.taskSlot}`)
+          this.log(`\tTask Container: ${task.taskContainer}\n`)
+        })
+      })
     } catch (error: any) {
       this.log(error.message)
     }
