@@ -53,9 +53,6 @@ async function setConfigs() {
   } catch (error) {
     console.log(error);
   }
-
-  console.log("setConfigs url: ", url)
-  console.log("setConfigs token: ", token)
 }
 
 const api = {
