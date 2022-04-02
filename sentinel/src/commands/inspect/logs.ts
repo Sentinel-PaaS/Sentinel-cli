@@ -14,7 +14,7 @@ export default class Logs extends Command {
       {
         type: 'input',
         name: 'appName',
-        message: 'What is the name of your application?',
+        message: 'What is the full name of your application? You can get the full name from the `sentinel inspect inventory` command (e.g helloworld_production)',
         validate(input: string) {
           if (input.length > 0 && !input.includes(' ')) return true
 
@@ -22,8 +22,13 @@ export default class Logs extends Command {
         },
       },
     ])
-    this.log(`Getting logs for ${answers.appName}...`)
-    const response: any = await api.getLogs(answers)
-    this.log(response.data)
+
+    try {
+      this.log(`Getting logs for ${answers.appName}...`)
+      const response: any = await api.getLogs(answers)
+      this.log(response.data)
+    } catch (error: any) {
+      this.log(error.message)
+    }
   }
 }
