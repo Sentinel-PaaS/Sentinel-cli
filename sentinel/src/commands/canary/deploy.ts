@@ -2,7 +2,7 @@
 import { Command, Flags } from '@oclif/core'
 const inquirer = require('inquirer')
 //const api = require('../lib/api.ts')
-import api from "../../lib/api.js";
+import api from '../../lib/api.js'
 
 export default class Deploy extends Command {
   static description = 'Initiates a canary deployment'
@@ -13,6 +13,15 @@ export default class Deploy extends Command {
 
   public async run(): Promise<void> {
     let answers = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'appName',
+        message: 'What is the name of your application?',
+        validate(input: string) {
+          if (input.length > 0 && !input.includes(' ')) return true
+          throw new Error('Please provide an application name with no spaces.')
+        },
+      },
       {
         type: 'input',
         name: 'appImage',
@@ -60,15 +69,6 @@ export default class Deploy extends Command {
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a host name.')
-        },
-      },
-      {
-        type: 'input',
-        name: 'appName',
-        message: 'What is the name of your application?',
-        validate(input: string) {
-          if (input.length > 0 && !input.includes(' ')) return true
-          throw new Error('Please provide an application name with no spaces.')
         },
       },
       {
@@ -148,11 +148,11 @@ export default class Deploy extends Command {
         type: 'confirm',
         name: 'deployConfirmation',
         message: `Please confirm the information you entered is correct:
+          Application Name: ${answers.appName}
           Application Image: ${answers.appImage}
           Application Port: ${answers.appImagePort || 'N/A'}
           Canary Image: ${answers.canaryImage}
           Canary Port: ${answers.canaryImagePort || 'N/A'}
-          Application Name: ${answers.appName}
           Host Name: ${answers.hostName}
           Application Has Database: ${answers.hasDatabase}
           Database Username: ${answers.dbUsername || 'N/A'}

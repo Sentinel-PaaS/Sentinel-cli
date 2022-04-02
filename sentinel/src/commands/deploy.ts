@@ -20,6 +20,16 @@ export default class Deploy extends Command {
     const answers = await inquirer.prompt([
       {
         type: 'input',
+        name: 'appName',
+        message: 'What is the name of your application?',
+        validate(input: string) {
+          if (input.length > 0 && !input.includes(' ')) return true
+
+          throw new Error('Please provide an application name with no spaces.')
+        },
+      },
+      {
+        type: 'input',
         name: 'appImage',
         message: 'Please provide the registry and repository of your application image. ex: registry/respository',
         validate(input: string) {
@@ -34,20 +44,8 @@ export default class Deploy extends Command {
         name: 'appImagePort',
         message: 'If your image exposes a port, please specify the port number: ',
         validate(input: string) {
-          // TODO: validate with regex
-          //Check that it is a valid digit
           if (input.length === 0 || +input > 0) return true
           throw new Error('Please provide a valid port number.')
-        },
-      },
-      {
-        type: 'input',
-        name: 'appName',
-        message: 'What is the name of your application?',
-        validate(input: string) {
-          if (input.length > 0 && !input.includes(' ')) return true
-
-          throw new Error('Please provide an application name with no spaces.')
         },
       },
       {
@@ -149,9 +147,9 @@ export default class Deploy extends Command {
         type: 'confirm',
         name: 'deployConfirmation',
         message: `Please confirm the information you entered is correct:
+          Application Name: ${answers.appName}
           Application Image: ${answers.appImage}
           Port: ${answers.appImagePort || 'N/A'}
-          Application Name: ${answers.appName}
           Host Name: ${answers.hostName}
           Application Has Database: ${answers.hasDatabase}
           Database Username: ${answers.dbUsername || 'N/A'}
