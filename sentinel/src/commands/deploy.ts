@@ -17,6 +17,26 @@ export default class Deploy extends Command {
 
   public async run(): Promise<void> {
     inquirer.registerPrompt('file', inquirerFilePath)
+    let ipConfirm
+
+    try {
+      const managerIP = await api.getManagerIP()
+      ipConfirm = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'ipConfirmation',
+          message: `Please confirm the domain name you want associated with this app resolves to the following IP address before continuing: ${managerIP.data.managerIP}`,
+        }
+      ])
+    } catch (error: any) {
+      this.log(error.message)
+    }
+
+    if (ipConfirm.ipConfirmation === false) {
+      this.error('To continue, you must have a domain name resolving to the provided IP address.')
+    }
+
+
     const answers = await inquirer.prompt([
       {
         type: 'input',
@@ -51,7 +71,7 @@ export default class Deploy extends Command {
       {
         type: 'input',
         name: 'hostName',
-        message: 'What is the hostname of your application? ex: helloworld.com',
+        message: 'What is the hostname of your application? (ex: helloworld.com)',
         validate(input: string) {
           if (input.length > 0 && !input.includes(' ')) return true
 
@@ -146,6 +166,7 @@ export default class Deploy extends Command {
       {
         type: 'confirm',
         name: 'deployConfirmation',
+        default: false,
         message: `Please confirm the information you entered is correct:
           Application Name: ${answers.appName}
           Application Image: ${answers.appImage}
