@@ -22,7 +22,6 @@ async function execute(command) {
 }
 
 async function setConfigs() {
-  console.log("in setConfigs");
   let user = await execute('echo $USER')
   user = user.replace('\n', '')
   let path = `/home/${user}/.sentinel/config`
@@ -307,12 +306,11 @@ const api = {
       return error
     }
   },
-  initializeCluster: async () => {
+  initializeCluster: async (userEmail) => {
     try {
       await setConfigs()
 
-      const response = await axios.post(url + '/api/cluster/initialize')
-      console.log(response)
+      await axios.post(url + '/api/cluster/initialize', userEmail)
     } catch (error) {
       throw error
     }

@@ -1,4 +1,5 @@
 import { Command } from '@oclif/core'
+const inquirer = require('inquirer')
 const childProcess = require('child_process')
 const { spawn } = require('child_process')
 const fs = require('fs')
@@ -22,8 +23,10 @@ export default class Init extends Command {
       user = user.replace('\n', '')
       let path = `/home/${user}/.sentinel/config`
 
+      const userEmail = await this.promptForEmail()
+
       console.log(await this.getConfigScript(user));
-      
+
       console.log(await this.executeConfigScript(user))
 
       this.log('Initializing cloud infrastructure. Please stand by.')
@@ -38,12 +41,27 @@ export default class Init extends Command {
 
       this.log('Almost done, just a few more minutes.')
 
-      await api.initializeCluster()
+      // await api.initializeCluster(userEmail)
 
       this.log('Successfully initialized cloud infrastructure')
     } catch (error) {
       console.log(error)
       this.error('An error ocurred while initializing your infrastructure.')
+    }
+  }
+
+  private async promptForEmail(): Promise<any> {
+    try {
+      const email = await inquirer.prompt(
+        {
+          type: "input",
+          name: "email",
+          message: "Your application must use HTTPS. In order for us to set this up we use Let's Encrypt.\nPlease provide an email so that we can create the certificate or see our documentation for more info."
+        }
+      )
+      return email
+    } catch (error) {
+      throw error
     }
   }
 
@@ -188,9 +206,9 @@ export default class Init extends Command {
   private saveAuthToken(path: string): void {
     const token = generateAuthToken()
     try {
-     fs.writeFileSync(`${path}/token.txt`, token) 
+      fs.writeFileSync(`${path}/token.txt`, token)
     } catch (err) {
-      throw new Error('Could not save auth token') 
+      throw new Error('Could not save auth token')
     }
   }
 }
