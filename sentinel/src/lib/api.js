@@ -80,6 +80,7 @@ const api = {
     }
   },
   deployApplication: async (answers) => {
+    await setConfigs()
     let data = {
       productionImagePath: answers.appImage,
       productionPort: answers.appImagePort,
@@ -92,10 +93,9 @@ const api = {
       dbName: answers.dbName,
       dbCreateSchemaOnDeploy: answers.createSchemaOnDeploy,
     }
-    let headers = { Authorization: `Bearer ${token}` }
+    let headers = { authorization: `bearer ${token}` }
 
     try {
-      await setConfigs()
       const response = await axios.post(url + '/api/apps', data, {
         headers
       })
@@ -276,6 +276,7 @@ const api = {
 
   },
   getLogs: async (answers) => {
+    await setConfigs()
     try {
       const response = await axios.get(url + `/api/apps/${answers.appName}/logs`, {
         headers: {
@@ -287,7 +288,21 @@ const api = {
       return error
     }
   },
+  getManagerIP: async (answers) => {
+    try {
+      await setConfigs()
+      const response = await axios.get(url + `/api/cluster/managerIP`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      return response
+    } catch (error) {
+      return error
+    }
+  },
   setDomains: async (answers) => {
+    await setConfigs()
     const data = {
       traefikHostName: answers.traefikHostName,
       prometheusHostName: answers.prometheusHostName,
