@@ -4,7 +4,6 @@ const { spawn } = require('child_process')
 const fs = require('fs')
 import generateAuthToken from '../lib/generateToken'
 import api from '../lib/api.js'
-let path = ''
 
 export default class Init extends Command {
   static description = 'Initialize Sentinel infrastructure'
@@ -21,7 +20,7 @@ export default class Init extends Command {
     try {
       let user: string = await this.execute('echo $USER')
       user = user.replace('\n', '')
-      path = `/home/${user}/.sentinel/config`
+      let path = `/home/${user}/.sentinel/config`
 
       console.log(await this.getConfigScript(user));
       
@@ -35,9 +34,9 @@ export default class Init extends Command {
 
       this.saveAuthToken(path)
 
-      await api.setConfigs(path)
-
       await this.executeAnsible(path)
+
+      this.log('Almost done, just a few more minutes.')
 
       await api.initializeCluster()
 
@@ -151,8 +150,6 @@ export default class Init extends Command {
   }
 
   private async executeAnsible(path: string): Promise<string> {
-    // console.log(await this.execute('cd /home/$USER/.sentinel/config/ansible && ansible-playbook -i ./inventory/hosts playbook.yml --fork 1'))
-
     return new Promise((resolve, reject) => {
       const args = [
         "-i",

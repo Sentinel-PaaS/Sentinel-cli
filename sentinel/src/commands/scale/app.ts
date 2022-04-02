@@ -43,9 +43,13 @@ export default class App extends Command {
     ])
 
     if (answers.scaleApp) {
-      this.log(`Scaling ${answers.appName} to ${answers.scaleNumber}...`)
-      const response: any = await api.scaleApp(answers)
-      this.log(response.data)
+      try {
+        this.log(`Scaling ${answers.appName} to ${answers.scaleNumber}...`)
+        const response: any = await api.scaleApp(answers)
+        this.log(response.data)
+      } catch (error: any) {
+        this.log(error.message)
+      }
     }
   }
 }

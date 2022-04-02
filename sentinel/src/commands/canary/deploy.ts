@@ -64,11 +64,11 @@ export default class Deploy extends Command {
       {
         type: 'input',
         name: 'hostName',
-        message: 'What is the host name of your application? ex: helloworld.com',
+        message: 'What is the hostname of your application? ex: helloworld.com',
         validate(input: string) {
           if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide a host name.')
+          throw new Error('Please provide a hostname.')
         },
       },
       {
@@ -106,7 +106,7 @@ export default class Deploy extends Command {
       {
         type: 'input',
         name: 'dbHost',
-        message: 'Please enter the database host name: ',
+        message: 'Please enter the host name your application uses to connect to your database: ',
         when(answers: any) {
           return answers.hasDatabase
         },
@@ -153,7 +153,8 @@ export default class Deploy extends Command {
           Application Port: ${answers.appImagePort || 'N/A'}
           Canary Image: ${answers.canaryImage}
           Canary Port: ${answers.canaryImagePort || 'N/A'}
-          Host Name: ${answers.hostName}
+          Application Name: ${answers.appName}
+          Hostname: ${answers.hostName}
           Application Has Database: ${answers.hasDatabase}
           Database Username: ${answers.dbUsername || 'N/A'}
           Database Password: ${answers.dbPassword || 'N/A'}
@@ -164,9 +165,13 @@ export default class Deploy extends Command {
     ])
   
     if (finalConfirmation.deployConfirmation) {
-      this.log('Deploying canary...')
-      const response: any = await api.canaryDeploy(answers)
-      this.log(response.data)
+      try {
+        this.log('Deploying canary...')
+        const response: any = await api.canaryDeploy(answers)
+        this.log(response.data)
+      } catch (error: any) {
+        this.log(error.message)
+      }
     } else {
       this.log('Canceling canary deployment...')
     }

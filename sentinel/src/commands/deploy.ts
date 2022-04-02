@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines-per-function */
-import {Command} from '@oclif/core'
+import { Command } from '@oclif/core'
 const inquirer = require('inquirer')
 const inquirerFilePath = require('inquirer-file-path')
 const fs = require('fs')
@@ -51,11 +51,11 @@ export default class Deploy extends Command {
       {
         type: 'input',
         name: 'hostName',
-        message: 'What is the host name of your application? ex: helloworld.com',
+        message: 'What is the hostname of your application? ex: helloworld.com',
         validate(input: string) {
           if (input.length > 0 && !input.includes(' ')) return true
 
-          throw new Error('Please provide a valid host name.')
+          throw new Error('Please provide a valid hostname.')
         },
       },
       {
@@ -93,7 +93,7 @@ export default class Deploy extends Command {
       {
         type: 'input',
         name: 'dbHost',
-        message: 'Please enter the database host name: ',
+        message: 'Please enter the host name your application uses to connect to your database: ',
         when(answers: any) {
           return answers.hasDatabase
         },
@@ -150,7 +150,8 @@ export default class Deploy extends Command {
           Application Name: ${answers.appName}
           Application Image: ${answers.appImage}
           Port: ${answers.appImagePort || 'N/A'}
-          Host Name: ${answers.hostName}
+          Application Name: ${answers.appName}
+          Hostname: ${answers.hostName}
           Application Has Database: ${answers.hasDatabase}
           Database Username: ${answers.dbUsername || 'N/A'}
           Database Password: ${answers.dbPassword || 'N/A'}
@@ -167,18 +168,25 @@ export default class Deploy extends Command {
 
       const file: string = fs.readFileSync('/..'.repeat(numOfFoldersToGetToHome) + '/' + answers.pathToDbFile, 'utf-8', (err: any, data: any) => {
         if (err) throw err
-        console.log(data)
       })
 
-      this.log('Deploying application...')
-      const sqlResponse: any = await api.uploadSQL(answers, file, dbFileName)
-      const response: any = await api.deployApplication(answers)
-      this.log(sqlResponse.data)
-      this.log(response.data)
+      try {
+        this.log('Deploying application...')
+        const sqlResponse: any = await api.uploadSQL(answers, file, dbFileName)
+        const response: any = await api.deployApplication(answers)
+        this.log(sqlResponse.data)
+        this.log(response.data)
+      } catch (error: any) {
+        this.log(error.message)
+      }
     } else if (finalConfirmation.deployConfirmation && (!answers.hasDatabase || !answers.createSchemaOnDeploy)) {
-      this.log('Deploying application...')
-      const response = await api.deployApplication(answers)
-      this.log(response.data)
+      try {
+        this.log('Deploying application with no database...')
+        const response = await api.deployApplication(answers)
+        this.log(response.data)
+      } catch (error: any) {
+        this.log(error.message)
+      }
     }
   }
 }

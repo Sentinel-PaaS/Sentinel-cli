@@ -21,9 +21,13 @@ export default class Scale extends Command {
     ])
 
     if (answers.scaleCluster !== 'cancel') {
-      this.log(`Scaling cluster ${answers.scaleCluster}...`)
-      const response: any = await api.scaleCluster(answers)
-      this.log(response.data)
+      try {
+        this.log(`Scaling cluster ${answers.scaleCluster}...`)
+        const response: any = await api.scaleCluster(answers)
+        this.log(response.data)
+      } catch (error: any) {
+        this.log(error.message)
+      }
     } else {
       console.log('Canceling cluster scale')
     }

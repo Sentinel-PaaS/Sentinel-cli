@@ -9,8 +9,12 @@ export default class Inspect extends Command {
   ]
 
   public async run(): Promise<void> {
-    this.log('Getting cluster information...')
-    const response: any = await api.inspectCluster()
-    this.log(response.data)
+    try {
+      this.log('Getting cluster information...')
+      const response: any = await api.inspectCluster()
+      this.log(response.data)
+    } catch (error: any) {
+      this.log(error.message)
+    }
   }
 }
