@@ -147,6 +147,7 @@ export default class Deploy extends Command {
       {
         type: 'confirm',
         name: 'deployConfirmation',
+        default: false,
         message: `Please confirm the information you entered is correct:
           Application Name: ${answers.appName}
           Application Image: ${answers.appImage}
