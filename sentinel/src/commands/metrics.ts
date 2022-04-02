@@ -11,6 +11,24 @@ export default class Metrics extends Command {
   ]
 
   public async run(): Promise<void> {
+    let ipConfirm
+    try {
+      const managerIP = await api.getManagerIP()
+      ipConfirm = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'ipConfirmation',
+          message: `Before continuing, please confirm you have unique domain names that will be used for your Traefik, Prometheus, and Grafana dashboards\n(e.g., traefik.user.com, prometheus.user.com, grafana.user.com) each pointing to the following IP address: ${managerIP.data.managerIP}`,
+        }
+      ])
+    } catch (error: any) {
+      this.log(error.message)
+    }
+
+    if (ipConfirm.ipConfirmation === false) {
+      this.error('To continue, you must have your domain names resolving to the provided IP address.')
+    }
+
     const answers = await inquirer.prompt([
       {
         type: 'input',
@@ -60,8 +78,8 @@ export default class Metrics extends Command {
     } else if (finalConfirmation.domainConfirmation) {
       try {
         this.log('Setting up metrics domains...')
-        const response: any = await api.setDomains(answers)
-        this.log(response.data)
+        await api.setDomains(answers)
+        this.log('Domain Successfully updated')
       } catch (error: any) {
         this.log(error.message)
       }
