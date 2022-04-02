@@ -29,9 +29,13 @@ export default class App extends Command {
     ])
 
     if (answers.removeApp) {
-      this.log(`Removing ${answers.appName} from production...`)
-      const response: any = await api.removeApp(answers)
-      this.log(response.data)
+      try {
+        this.log(`Removing ${answers.appName} from production...`)
+        const response: any = await api.removeApp(answers)
+        this.log(response.data)
+      } catch (error: any) {
+        this.log(error.message)
+      }
     }
   }
 }

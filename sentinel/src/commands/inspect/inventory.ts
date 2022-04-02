@@ -9,9 +9,13 @@ export default class Inventory extends Command {
   ]
 
   public async run(): Promise<void> {
-    this.log('Getting inventory...')
-    const response: any = await api.getApps()
-    this.log(response.data)
+    try {
+      this.log('Getting inventory...')
+      const response: any = await api.getApps()
+      this.log(response.data)
+    } catch (error: any) {
+      this.log(error.message)
+    }
     // TODO: find a way to neatly display info
     //this.log("List of deployed applications")
   }

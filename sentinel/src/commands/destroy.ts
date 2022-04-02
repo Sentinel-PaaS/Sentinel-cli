@@ -30,11 +30,9 @@ export default class Destroy extends Command {
       this.log('Tearing down your applications and Sentinel, please wait this may take a few minutes.')
 
       try {
-        await api.setConfigs(path)
         const response = await api.destroyAll()
 
         if (response.status === 200) {
-          // if (true) {
           await this.terraformDestroy(path)
 
           // Delete configuration files

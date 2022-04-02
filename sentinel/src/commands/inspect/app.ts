@@ -22,8 +22,13 @@ export default class App extends Command {
         },
       },
     ])
-    this.log(`Getting app information for ${answers.appName}...`)
-    const response: any = await api.getApp(answers)
-    this.log(response.data)
+
+    try {
+      this.log(`Getting app information for ${answers.appName}...`)
+      const response: any = await api.getApp(answers)
+      this.log(response.data)
+    } catch (error: any) {
+      this.log(error.message)
+    }
   }
 }
