@@ -1,12 +1,62 @@
 /* eslint-disable max-lines-per-function */
 const axios = require('axios')
-const path = require('path')
+// const path = require('path')
 const FormData = require('form-data')
 const fs = require('fs')
-// const tokenFile = '/home/$USER/.sentinel/config'
+const childProcess = require('child_process')
 
 let token = ''
 let url = ''
+
+async function execute(command) {
+  return new Promise((resolve, reject) => {
+    childProcess.exec(command, (err, contents) => {
+      if (err) {
+        reject(err)
+        return
+      }
+
+      resolve(contents)
+    })
+  })
+}
+
+async function setConfigs() {
+  console.log("in setConfigs");
+  let user = await execute('echo $USER')
+  user = user.replace('\n', '')
+  let path = `/home/${user}/.sentinel/config`
+
+  try {
+    token = await new Promise((resolve, reject) => {
+      fs.readFile(`${path}/token.txt`, 'utf-8', (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
+    })
+
+    let sentinelIP = await new Promise((resolve, reject) => {
+      fs.readFile(`${path}/sentinel-ip.txt`, 'utf-8', (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
+    })
+
+    sentinelIP = sentinelIP.replace('\n', '')
+    url = `http://${sentinelIP}:80`
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log("setConfigs url: ", url)
+  console.log("setConfigs token: ", token)
+}
 
 const api = {
   readToken: async () => {
@@ -23,16 +73,15 @@ const api = {
       Authorization: `Bearer ${token}`,
     }
 
-    const response = await axios.post(url + `/api/apps/${answers.appName}/upload`, form, {
-      headers,
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.post(url + `/api/apps/${answers.appName}/upload`, form, {
+        headers,
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
   },
   deployApplication: async (answers) => {
     let data = {
@@ -47,19 +96,17 @@ const api = {
       dbName: answers.dbName,
       dbCreateSchemaOnDeploy: answers.createSchemaOnDeploy,
     }
-
     let headers = { Authorization: `Bearer ${token}` }
 
-    const response = await axios.post(url + '/api/apps', data, {
-      headers,
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.post(url + '/api/apps', data, {
+        headers
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw response
+    }
   },
   canaryDeploy: async (answers) => {
     let data = {
@@ -76,110 +123,103 @@ const api = {
       canaryWeight: answers.trafficPercentage,
     }
 
-    const response = await axios.post(url + `/api/apps/${answers.appName}/canary`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.post(url + `/api/apps/${answers.appName}/canary`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => {
-        return error
-      })
-
-    return response
+      return response;
+    } catch (error) {
+      throw error
+    }
   },
   canaryTraffic: async (answers) => {
     let data = {
       newWeight: answers.trafficPercentage,
     }
 
-    const response = await axios.put(url + `/api/apps/${answers.appName}/canary`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.put(url + `/api/apps/${answers.appName}/canary`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
   },
   promoteCanary: async (answers) => {
-    const response = await axios.post(url + `/api/apps/${answers.appName}/promote`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.post(url + `/api/apps/${answers.appName}/promote`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
   },
   rollbackCanary: async (answers) => {
-    const response = await axios.post(url + `/api/apps/${answers.appName}/rollback`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.post(url + `/api/apps/${answers.appName}/rollback`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
   },
   getApps: async () => {
-    const response = await axios.get(url + '/api/apps/', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.get(url + '/api/apps/', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
   },
   getApp: async (answers) => {
-    const response = await axios.get(url + `/api/apps/${answers.appName}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.get(url + `/api/apps/${answers.appName}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
   },
   removeApp: async (answers) => {
-    const response = await axios.delete(url + `/api/apps/${answers.appName}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.delete(url + `/api/apps/${answers.appName}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
   },
   destroyAll: async () => {
     try {
+      await setConfigs()
       const response = await axios.delete(url + '/api/destroy', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -187,94 +227,69 @@ const api = {
       })
       return response
     } catch (error) {
-      console.log("Error when requesting to destroy", error);
+      throw error
     }
-    // })
-    //   .then(response => {
-    //     console.log(response);
-    //     return response
-    //   })
-    //   .catch(error => {
-    //     return error
   },
   scaleCluster: async (answers) => {
     let data = {
       scaleCluster: answers.scaleCluster,
     }
+    try {
+      await setConfigs()
+      const response = await axios.put(url + '/api/cluster/scale', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
-    const response = await axios.put(url + '/api/cluster/scale', data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
+
   },
-  inspectCluster: async (answers) => {
-    const response = await axios.get(url + '/api/cluster', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
+  inspectCluster: async () => {
+    try {
+      await setConfigs()
+      const response = await axios.get(url + '/api/cluster', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
   },
   scaleApp: async (answers) => {
     let data = {
       scaleNumber: answers.scaleNumber,
     }
 
-    const response = await axios.put(url + `/api/apps/${answers.appName}/scale`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        return response
+    try {
+      await setConfigs()
+      const response = await axios.put(url + `/api/apps/${answers.appName}/scale`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => {
-        return error
-      })
-    return response
+      return response
+    } catch (error) {
+      throw error
+    }
+
   },
   initializeCluster: async () => {
-    await axios.post(url + '/api/cluster/initialize')
-  },
-  setConfigs: async (sentinelConfigPath) => {
-    let sentinelIP = await new Promise((resolve, reject) => {
-      fs.readFile(path.join(`${sentinelConfigPath}/sentinel-ip.txt`), 'utf-8', (err, data) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(data)
-        }
-      })
-    })
+    try {
+      await setConfigs()
 
-    token = await new Promise((resolve, reject) => {
-      fs.readFile(path.join(`${sentinelConfigPath}/token.txt`), 'utf-8', (err, data) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(data)
-        }
-      })
-    })
-
-    sentinelIP = sentinelIP.replace('\n', '')
-    url = `http://${sentinelIP}:80`
-    console.log("url set: ", url);
+      const response = await axios.post(url + '/api/cluster/initialize')
+      console.log(response)
+    } catch (error) {
+      throw error
+    }
   }
+
 }
 
 export default api
