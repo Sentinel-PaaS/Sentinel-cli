@@ -56,7 +56,7 @@ export default class Init extends Command {
         {
           type: "input",
           name: "email",
-          message: "Your application must use HTTPS. In order for us to set this up we use Let's Encrypt.\nPlease provide an email so that we can create the certificate or see our documentation for more info."
+          message: "Your application will automatically be configured with HTTPS using Let's Encrypt.\nAll we need from you is an email address so that we can create the certificate.\nPlease enter it below or see our documentation for more info.\nYour Email: "
         }
       )
       return email
