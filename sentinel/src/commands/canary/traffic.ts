@@ -41,9 +41,13 @@ export default class Traffic extends Command {
     ])
 
     if (answers.changeTraffic) {
-      this.log('Changing canary traffic rules...')
-      const response: any = await api.canaryTraffic(answers)
-      this.log(response.data)
+      try {
+        this.log('Changing canary traffic rules...')
+        const response: any = await api.canaryTraffic(answers)
+        this.log(response.data)
+      } catch (error: any) {
+        this.log(error.message)
+      }
     }
   }
 }

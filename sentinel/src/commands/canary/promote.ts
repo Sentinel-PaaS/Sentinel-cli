@@ -29,10 +29,15 @@ export default class Promote extends Command {
         default: false,
       },
     ])
+
     if (answers.promote) {
-      this.log('Promoting canary..')
-      const response: any = await api.promoteCanary(answers)
-      this.log(response.data)
+      try {
+        this.log('Promoting canary..')
+        const response: any = await api.promoteCanary(answers)
+        this.log(response.data)
+      } catch (error: any) {
+        this.log(error.message)
+      }
     } else {
       console.log('Canceling canary promotion..')
     }

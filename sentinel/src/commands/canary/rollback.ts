@@ -30,10 +30,15 @@ export default class Rollback extends Command {
         default: false,
       },
     ])
+
     if (answers.rollback) {
-      this.log('Removing canary version of the application...')
-      const response: any = await api.rollbackCanary(answers)
-      this.log(response.data)
+      try {
+        this.log('Removing canary version of the application...')
+        const response: any = await api.rollbackCanary(answers)
+        this.log(response.data)
+      } catch (error: any) {
+        this.log(error.message)
+      }
     } else {
       this.log('Canceling rollback of canary...')
     }
