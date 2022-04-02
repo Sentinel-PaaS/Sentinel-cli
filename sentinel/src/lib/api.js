@@ -242,6 +242,37 @@ const api = {
     })
     return response
   },
+  getLogs: async (answers) => {
+    try {
+      const response = await axios.get(url + `/api/apps/${answers.appName}/logs`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      return response
+    } catch (error) {
+      return error
+    }
+  },
+  setDomains: async (answers) => {
+    const data = {
+      traefikHostName: answers.traefikHostName,
+      prometheusHostName: answers.prometheusHostName,
+      grafanaHostName: answers.grafanaHostName,
+      password: answers.password,
+    }
+
+    try {
+      const response = await axios.post(url + '/api/cluster/monitor/domains', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      return response
+    } catch (error) {
+      return error
+    }
+  },
   initializeCluster: async () => {
     console.log("Mock request to initialize cluster: ", url);
     // TODO: initialize the cluster
