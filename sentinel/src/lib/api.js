@@ -151,7 +151,7 @@ const api = {
   promoteCanary: async (answers) => {
     try {
       await setConfigs()
-      const response = await axios.post(url + `/api/apps/${answers.appName}/promote`, {
+      const response = await axios.post(url + `/api/apps/${answers.appName}/promote`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -164,9 +164,9 @@ const api = {
   rollbackCanary: async (answers) => {
     try {
       await setConfigs()
-      const response = await axios.post(url + `/api/apps/${answers.appName}/rollback`, {
+      const response = await axios.post(url + `/api/apps/${answers.appName}/rollback`, {}, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       return response
@@ -296,6 +296,7 @@ const api = {
           Authorization: `Bearer ${token}`,
         },
       })
+      console.log(response);
       return response
     } catch (error) {
       return error
