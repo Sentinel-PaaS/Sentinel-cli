@@ -203,8 +203,7 @@ export default class Deploy extends Command {
     } else if (finalConfirmation.deployConfirmation && (!answers.hasDatabase || !answers.createSchemaOnDeploy)) {
       try {
         this.log('Deploying application with no database...')
-        const response = await api.deployApplication(answers)
-        this.log(response.data)
+        await api.deployApplication(answers)
       } catch (error: any) {
         this.log(error.message)
       }

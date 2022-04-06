@@ -19,15 +19,15 @@ export default class Init extends Command {
 
   public async run(): Promise<void> {
     try {
-      let user: string = await this.execute('echo $USER')
-      user = user.replace('\n', '')
-      let path = `/home/${user}/.sentinel/config`
-
+      const user: any = process.env.USER
+      let path = process.env.HOME + '/.sentinel/config'
+      let wgetResult = await this.installWget()
+      this.log(wgetResult)
       const userEmail = await this.promptForEmail()
 
-      console.log(await this.getConfigScript(user));
+      console.log(await this.getConfigScript())
 
-      console.log(await this.executeConfigScript(user))
+      console.log(await this.executeConfigScript())
 
       this.log('Initializing cloud infrastructure. Please stand by.')
 
@@ -50,6 +50,30 @@ export default class Init extends Command {
     }
   }
 
+  private async installWget(): Promise<any> {
+    // wget is installed so don't install it
+    if (await this.execute('echo which wget') !== 'wget not found') {
+      return Promise.resolve('wget is already installed')
+    } else {
+      this.log("Installing wget")
+      return new Promise((resolve, reject) => {
+        const wget = spawn('brew', ["install", "wget"]);
+        wget.stdout.on("data", (data: any) => {
+          console.log(`stdout: ${data}`);
+        });
+
+        wget.on('error', (error: any) => {
+          console.log(`error: ${error.message}`);
+          reject(error.message)
+        });
+
+        wget.on("close", (code: any) => {
+          resolve(`Process exited with code ${code}`)
+        });
+      })
+    }
+  }
+
   private async promptForEmail(): Promise<any> {
     try {
       const email = await inquirer.prompt(
@@ -65,8 +89,8 @@ export default class Init extends Command {
     }
   }
 
-  private async getConfigScript(user: string): Promise<string> {
-    const scriptPath = `/home/${user}/.sentinel/scripts`
+  private async getConfigScript(): Promise<string> {
+    const scriptPath = process.env.HOME + '/.sentinel/scripts'
     return new Promise((resolve, reject) => {
       spawn('mkdir', ['-p', scriptPath])
 
@@ -96,8 +120,8 @@ export default class Init extends Command {
     })
   }
 
-  private async executeConfigScript(user: string): Promise<string> {
-    const scriptPath = `/home/${user}/.sentinel/scripts`
+  private async executeConfigScript(): Promise<string> {
+    const scriptPath = `/$HOME/.sentinel/scripts`
     return new Promise((resolve: any, reject: any) => {
       childProcess.exec(`cd ${scriptPath}/ && chmod +x config.sh && ./config.sh`, (err: any, contents: any) => {
         if (err) {

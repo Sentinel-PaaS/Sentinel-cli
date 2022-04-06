@@ -22,9 +22,9 @@ async function execute(command) {
 }
 
 async function setConfigs() {
-  let user = await execute('echo $USER')
-  user = user.replace('\n', '')
-  let path = `/home/${user}/.sentinel/config`
+  // let user = await execute('echo $USER')
+  // user = user.replace('\n', '')
+  let path = `${process.env.HOME}/.sentinel/config`
 
   try {
     token = await new Promise((resolve, reject) => {

@@ -15,7 +15,7 @@ export default class Destroy extends Command {
   public async run(): Promise<void> {
     let user: string = await this.execute('echo $USER')
     user = user.replace('\n', '')
-    let path = `/home/${user}/.sentinel/config`
+    let path = process.env.HOME + '/.sentinel/config'
 
     const answers = await inquirer.prompt([
       {
@@ -33,7 +33,7 @@ export default class Destroy extends Command {
         const response = await api.destroyAll()
 
         if (response.status === 200) {
-          await this.terraformDestroy(path)
+          await this.terraformDestroy()
 
           // Delete configuration files
           this.execute('rm -rf ~/.sentinel')
@@ -48,8 +48,9 @@ export default class Destroy extends Command {
     }
   }
 
-  private async terraformDestroy(path: string): Promise<string> {
+  private async terraformDestroy(): Promise<string> {
     return new Promise((resolve, reject) => {
+      let path = process.env.HOME + '/.sentinel/config'
       const tfDestroy = spawn("terraform", [`-chdir=${path}/terraform`, "destroy", "-auto-approve"]);
       tfDestroy.stdout.on("data", (data: any) => {
         console.log(`stdout: ${data}`);
