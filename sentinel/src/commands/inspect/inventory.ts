@@ -1,4 +1,4 @@
-import {Command} from '@oclif/core'
+import { Command } from '@oclif/core'
 import api from '../../lib/api'
 
 export default class Inventory extends Command {
@@ -10,13 +10,20 @@ export default class Inventory extends Command {
 
   public async run(): Promise<void> {
     try {
-      this.log('Getting inventory...')
+      this.log('Getting inventory...\n')
       const response: any = await api.getApps()
-      this.log(response.data)
+
+      this.log('Currently deployed apps:')
+      response.data.forEach((service: any) => {
+        if (service.appName) {
+          this.log(`App Name:\t${service.appName}`)
+          this.log(`Service Name:\t${service.serviceName}\n`)
+        } else {
+          this.log(`Service Name:\t${service.serviceName} (Sentinel default)\n`)
+        }
+      })
     } catch (error: any) {
       this.log(error.message)
     }
-    // TODO: find a way to neatly display info
-    //this.log("List of deployed applications")
   }
 }
