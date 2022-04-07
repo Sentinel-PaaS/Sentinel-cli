@@ -79,7 +79,7 @@ export default class Metrics extends Command {
       try {
         this.log('Setting up metrics domains...')
         await api.setDomains(answers)
-        this.log('Domain Successfully updated')
+        this.log('Domains Successfully updated')
       } catch (error: any) {
         this.log(error.message)
       }
