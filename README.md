@@ -12,9 +12,13 @@ Currently we can only deploy in the `us-east-2` region. This is where all cloud 
 
 You'll also need to install [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) and [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 
-Lastly, install the sentinel npm package [here](https://www.npmjs.com/package/@sentinel-paas/sentinel-cli) 
+Install the sentinel [npm package](https://www.npmjs.com/package/@sentinel-paas/sentinel-cli) 
 
-Run `sentinel init` 
+`npm i @sentinel-paas/sentinel-cli -g`
+
+Note the global flag
+
+Next, run `sentinel init` 
 
 This is a global command that will spin up the necessary infrastructure in AWS. All Sentinel commands will be communicating with this server. Keep an eye on the output and expect to see a prompt asking you to connect to the Sentinel server. 
 

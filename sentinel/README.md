@@ -20,7 +20,7 @@ $ npm install -g @sentinel-paas/sentinel-cli
 $ sentinel COMMAND
 running command...
 $ sentinel (--version)
-@sentinel-paas/sentinel-cli/0.0.1 linux-x64 node-v16.14.2
+@sentinel-paas/sentinel-cli/0.0.2 linux-x64 node-v16.14.2
 $ sentinel --help [COMMAND]
 USAGE
   $ sentinel COMMAND
