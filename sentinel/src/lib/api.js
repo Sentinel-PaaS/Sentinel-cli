@@ -1,6 +1,5 @@
 /* eslint-disable max-lines-per-function */
 const axios = require('axios')
-// const path = require('path')
 const FormData = require('form-data')
 const fs = require('fs')
 const childProcess = require('child_process')
@@ -22,8 +21,6 @@ async function execute(command) {
 }
 
 async function setConfigs() {
-  // let user = await execute('echo $USER')
-  // user = user.replace('\n', '')
   let path = `${process.env.HOME}/.sentinel/config`
 
   try {
@@ -296,7 +293,6 @@ const api = {
           Authorization: `Bearer ${token}`,
         },
       })
-      console.log(response);
       return response
     } catch (error) {
       return error

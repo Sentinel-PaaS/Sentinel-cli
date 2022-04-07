@@ -19,10 +19,10 @@ export default class Init extends Command {
 
   public async run(): Promise<void> {
     try {
-      const user: any = process.env.USER
       let path = process.env.HOME + '/.sentinel/config'
-      let wgetResult = await this.installWget()
-      this.log(wgetResult)
+
+      await this.installWget()
+
       const userEmail = await this.promptForEmail()
 
       console.log(await this.getConfigScript())

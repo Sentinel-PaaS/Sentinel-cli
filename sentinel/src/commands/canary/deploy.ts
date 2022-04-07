@@ -1,7 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import { Command, Flags } from '@oclif/core'
 const inquirer = require('inquirer')
-//const api = require('../lib/api.ts')
 import api from '../../lib/api.js'
 
 export default class Deploy extends Command {
