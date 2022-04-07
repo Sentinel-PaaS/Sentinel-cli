@@ -20,7 +20,7 @@ $ npm install -g @sentinel-paas/sentinel-cli
 $ sentinel COMMAND
 running command...
 $ sentinel (--version)
-@sentinel-paas/sentinel-cli/0.0.2 linux-x64 node-v16.14.2
+@sentinel-paas/sentinel-cli/0.0.3 linux-x64 node-v16.14.2
 $ sentinel --help [COMMAND]
 USAGE
   $ sentinel COMMAND
@@ -41,6 +41,8 @@ USAGE
 * [`sentinel init`](#sentinel-init)
 * [`sentinel inspect app`](#sentinel-inspect-app)
 * [`sentinel inspect inventory`](#sentinel-inspect-inventory)
+* [`sentinel inspect logs`](#sentinel-inspect-logs)
+* [`sentinel metrics`](#sentinel-metrics)
 * [`sentinel plugins`](#sentinel-plugins)
 * [`sentinel plugins:install PLUGIN...`](#sentinel-pluginsinstall-plugin)
 * [`sentinel plugins:inspect PLUGIN...`](#sentinel-pluginsinspect-plugin)
@@ -158,7 +160,7 @@ EXAMPLES
   $ sentinel deploy
 ```
 
-_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.1/dist/commands/deploy.ts)_
+_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.3/dist/commands/deploy.ts)_
 
 ## `sentinel destroy`
 
@@ -175,7 +177,7 @@ EXAMPLES
   $ sentinel destroy
 ```
 
-_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.1/dist/commands/destroy.ts)_
+_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.3/dist/commands/destroy.ts)_
 
 ## `sentinel help [COMMAND]`
 
@@ -212,7 +214,7 @@ EXAMPLES
   $ sentinel init
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.1/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.3/dist/commands/init.ts)_
 
 ## `sentinel inspect app`
 
@@ -244,6 +246,38 @@ EXAMPLES
   $ sentinel inspect inventory
 ```
 
+## `sentinel inspect logs`
+
+Provides application logs
+
+```
+USAGE
+  $ sentinel inspect logs
+
+DESCRIPTION
+  Provides application logs
+
+EXAMPLES
+  $ sentinel inspect logs
+```
+
+## `sentinel metrics`
+
+Initialize domains for application metrics.
+
+```
+USAGE
+  $ sentinel metrics
+
+DESCRIPTION
+  Initialize domains for application metrics.
+
+EXAMPLES
+  $ sentinel metrics
+```
+
+_See code: [dist/commands/metrics.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.3/dist/commands/metrics.ts)_
+
 ## `sentinel plugins`
 
 List installed plugins.
@@ -262,7 +296,7 @@ EXAMPLES
   $ sentinel plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.1.0/src/commands/plugins/index.ts)_
 
 ## `sentinel plugins:install PLUGIN...`
 
