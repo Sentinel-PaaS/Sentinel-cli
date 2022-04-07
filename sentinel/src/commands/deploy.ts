@@ -36,7 +36,6 @@ export default class Deploy extends Command {
       this.error('To continue, you must have a domain name resolving to the provided IP address.')
     }
 
-
     const answers = await inquirer.prompt([
       {
         type: 'input',
@@ -153,35 +152,47 @@ export default class Deploy extends Command {
         when(answers: any) {
           return answers.createSchemaOnDeploy
         },
-        validate(input: string) {
-          //this validation doesn't work
-          if (input.endsWith('.sql')) return true
-
-          throw new Error('Please provide a .sql file')
-        },
       },
     ])
 
-    const finalConfirmation = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'deployConfirmation',
-        default: false,
-        message: `Please confirm the information you entered is correct:
-          Application Name: ${answers.appName}
-          Application Image: ${answers.appImage}
-          Port: ${answers.appImagePort || 'N/A'}
-          Application Name: ${answers.appName}
-          Hostname: ${answers.hostName}
-          Application Has Database: ${answers.hasDatabase}
-          Database Username: ${answers.dbUsername || 'N/A'}
-          Database Password: ${answers.dbPassword || 'N/A'}
-          Database Name: ${answers.dbName || 'N/A'}
-          Database Host: ${answers.dbHost || 'N/A'}
-          Create schema on deploy: ${answers.createSchemaOnDeploy || 'N/A'}
-          Path to SQL File: ${answers.pathToDbFile || 'N/A'}`,
-      },
-    ])
+    let finalConfirmation
+    if (answers.hasDatabase) {
+      finalConfirmation = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'deployConfirmation',
+          default: false,
+          message: `Please confirm the information you entered is correct:
+            Application Name: ${answers.appName}
+            Application Image: ${answers.appImage}
+            Port: ${answers.appImagePort || 'N/A'}
+            Application Name: ${answers.appName}
+            Hostname: ${answers.hostName}
+            Application Has Database: ${answers.hasDatabase}
+            Database Username: ${answers.dbUsername || 'N/A'}
+            Database Password: ${answers.dbPassword || 'N/A'}
+            Database Name: ${answers.dbName || 'N/A'}
+            Database Host: ${answers.dbHost || 'N/A'}
+            Create schema on deploy: ${answers.createSchemaOnDeploy || 'N/A'}
+            Path to SQL File: ${answers.pathToDbFile || 'N/A'}`,
+          },
+      ])
+    } else {
+      finalConfirmation = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'deployConfirmation',
+          default: false,
+          message: `Please confirm the information you entered is correct:
+            Application Name: ${answers.appName}
+            Application Image: ${answers.appImage}
+            Port: ${answers.appImagePort || 'N/A'}
+            Application Name: ${answers.appName}
+            Hostname: ${answers.hostName}
+            Application Has Database: ${answers.hasDatabase}`
+          },
+      ])
+    }
 
     if (finalConfirmation.deployConfirmation && answers.createSchemaOnDeploy) {
       const filePath = answers.pathToDbFile.split('/')
