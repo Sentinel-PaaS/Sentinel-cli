@@ -63,7 +63,7 @@ export default class Deploy extends Command {
       {
         type: 'input',
         name: 'hostName',
-        message: 'What is the hostname of your application? ex: helloworld.com',
+        message: 'What is the hostname of your application? (ex: helloworld.com)',
         validate(input: string) {
           if (input.length > 0 && !input.includes(' ')) return true
 
@@ -110,7 +110,6 @@ export default class Deploy extends Command {
           return answers.hasDatabase
         },
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a database host with no spaces.')
@@ -124,7 +123,6 @@ export default class Deploy extends Command {
           return answers.hasDatabase
         },
         validate(input: string) {
-          // TODO: validate with regex
           if (input.length > 0 && !input.includes(' ')) return true
 
           throw new Error('Please provide a database name with no spaces.')
@@ -142,27 +140,48 @@ export default class Deploy extends Command {
       },
     ])
 
-    const finalConfirmation = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'deployConfirmation',
-        default: false,
-        message: `Please confirm the information you entered is correct:
-          Application Name: ${answers.appName}
-          Application Image: ${answers.appImage}
-          Application Port: ${answers.appImagePort || 'N/A'}
-          Canary Image: ${answers.canaryImage}
-          Canary Port: ${answers.canaryImagePort || 'N/A'}
-          Application Name: ${answers.appName}
-          Hostname: ${answers.hostName}
-          Application Has Database: ${answers.hasDatabase}
-          Database Username: ${answers.dbUsername || 'N/A'}
-          Database Password: ${answers.dbPassword || 'N/A'}
-          Database Name: ${answers.dbName || 'N/A'}
-          Database Host: ${answers.dbHost || 'N/A'}
-          Percentage of traffic routed to canary: ${answers.trafficPercentage}`,
-      },
-    ])
+    let finalConfirmation
+    if (answers.hasDatabase) {
+      finalConfirmation = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'deployConfirmation',
+          default: false,
+          message: `Please confirm the information you entered is correct:
+            Application Name: ${answers.appName}
+            Application Image: ${answers.appImage}
+            Application Port: ${answers.appImagePort || 'N/A'}
+            Canary Image: ${answers.canaryImage}
+            Canary Port: ${answers.canaryImagePort || 'N/A'}
+            Application Name: ${answers.appName}
+            Hostname: ${answers.hostName}
+            Application Has Database: ${answers.hasDatabase}
+            Database Username: ${answers.dbUsername || 'N/A'}
+            Database Password: ${answers.dbPassword || 'N/A'}
+            Database Name: ${answers.dbName || 'N/A'}
+            Database Host: ${answers.dbHost || 'N/A'}
+            Percentage of traffic routed to canary: ${answers.trafficPercentage}`,
+        },
+      ])
+    } else {
+      finalConfirmation = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'deployConfirmation',
+          default: false,
+          message: `Please confirm the information you entered is correct:
+            Application Name: ${answers.appName}
+            Application Image: ${answers.appImage}
+            Application Port: ${answers.appImagePort || 'N/A'}
+            Canary Image: ${answers.canaryImage}
+            Canary Port: ${answers.canaryImagePort || 'N/A'}
+            Application Name: ${answers.appName}
+            Hostname: ${answers.hostName}
+            Application Has Database: ${answers.hasDatabase}
+            Percentage of traffic routed to canary: ${answers.trafficPercentage}`,
+        },
+      ])
+    }
   
     if (finalConfirmation.deployConfirmation) {
       try {
