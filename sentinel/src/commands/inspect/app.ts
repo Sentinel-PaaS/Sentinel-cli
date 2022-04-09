@@ -39,6 +39,7 @@ export default class App extends Command {
           this.log(`\tTask Status Timestamp: ${task.taskStatusTimestamp}`)
           this.log(`\tTask Slot: ${task.taskSlot}`)
           this.log(`\tTask Container: ${task.taskContainer}\n`)
+          this.log(`\tTask Node ID: ${task.taskNodeID}\n`)
         })
       })
     } catch (error: any) {
