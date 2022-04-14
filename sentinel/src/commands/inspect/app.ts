@@ -38,8 +38,10 @@ export default class App extends Command {
           this.log(`\tTask Status: ${task.taskStatus}`)
           this.log(`\tTask Status Timestamp: ${task.taskStatusTimestamp}`)
           this.log(`\tTask Slot: ${task.taskSlot}`)
-          this.log(`\tTask Container: ${task.taskContainer}\n`)
-          this.log(`\tTask Node ID: ${task.taskNodeID}\n`)
+          this.log(`\tHost Node Metrics:`)
+          this.log(`\t\tDisk Space: ${task.hostNodeMetrics.diskSpace}`)
+          this.log(`\t\tMemory Space: ${task.hostNodeMetrics.memorySpace}`)
+          this.log(`\t\tCPU Usage Avg Last 10 Mins: ${task.hostNodeMetrics.cpuUsageAvgLast10Minutes}\n`)
         })
       })
     } catch (error: any) {
