@@ -10,16 +10,26 @@ export default class App extends Command {
   ]
 
   public async run(): Promise<void> {
+    let servicesList
+    let appNamesList
+
+    try {
+      let response = await api.getApps()
+      servicesList = response.data
+    } catch (error: any) {
+      this.log(error.message)
+    }
+
+    servicesList = servicesList.filter((service: any) => service.appName && service.serviceName.endsWith('production'))
+    appNamesList = servicesList.map((service: any) => service.appName)
+
     const answers = await inquirer.prompt([
       {
-        type: 'input',
+        type: 'list',
         name: 'appName',
-        message: 'What is the name of your application?',
-        validate(input: string) {
-          if (input.length > 0 && !input.includes(' ')) return true
-
-          throw new Error('Please provide an application name with no spaces.')
-        },
+        message: 'Choose your application: ',
+        choices: appNamesList,
+        require: true,
       },
     ])
 
