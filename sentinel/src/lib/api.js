@@ -108,6 +108,7 @@ const api = {
       canaryImagePath: answers.canaryImage,
       canaryPort: answers.canaryImagePort,
       hostname: answers.hostName,
+      isSticky: answers.isSticky,
       appHasDatabase: answers.hasDatabase,
       dbUsername: answers.dbUsername,
       dbPassword: answers.dbPassword,
