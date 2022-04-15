@@ -83,6 +83,12 @@ export default class Deploy extends Command {
       },
       {
         type: 'confirm',
+        name: 'isSticky',
+        message: 'Do you want to use sticky sessions?',
+        required: false,
+      },
+      {
+        type: 'confirm',
         name: 'hasDatabase',
         message: 'Does your application use a postgres database?',
         default: false,
@@ -166,6 +172,7 @@ export default class Deploy extends Command {
             Canary Port: ${answers.canaryImagePort || 'N/A'}
             Application Name: ${answers.appName}
             Hostname: ${answers.hostName}
+            Sticky Sessions: ${answers.isSticky}
             Application Has Database: ${answers.hasDatabase}
             Database Username: ${answers.dbUsername || 'N/A'}
             Database Password: ${answers.dbPassword || 'N/A'}
@@ -188,6 +195,7 @@ export default class Deploy extends Command {
             Canary Port: ${answers.canaryImagePort || 'N/A'}
             Application Name: ${answers.appName}
             Hostname: ${answers.hostName}
+            Sticky Sessions: ${answers.isSticky}
             Application Has Database: ${answers.hasDatabase}
             Percentage of traffic routed to canary: ${answers.trafficPercentage}`,
         },
