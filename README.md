@@ -6,9 +6,9 @@ Ensure that you have an AWS account and have the correct permissions for creatin
 and credentials file. 
 More info [here](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#shared-configuration-and-credentials-files) and [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
 
-You'll need to create a key pair in your aws account with the exact name of `ssh-kp`. This will be used for setting up the Sentinel API server. Be sure to save it locally on your machine at `~/.ssh/`.
-
 Currently we can only deploy in the `us-east-2` region. This is where all cloud resources will be provisioned see issue [#10](https://github.com/Sentinel-PaaS/Sentinel-CLI/issues/10)
+
+You'll need to create a key pair in your aws account with the exact name of `ssh-kp`. This will be used for setting up the Sentinel API server. Be sure to save it locally on your machine at `~/.ssh/`.
 
 You'll also need to install [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) and [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 
