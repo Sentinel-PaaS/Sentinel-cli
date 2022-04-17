@@ -20,7 +20,7 @@ $ npm install -g @sentinel-paas/sentinel-cli
 $ sentinel COMMAND
 running command...
 $ sentinel (--version)
-@sentinel-paas/sentinel-cli/0.0.3 linux-x64 node-v16.14.2
+@sentinel-paas/sentinel-cli/0.0.9 linux-x64 node-v16.14.2
 $ sentinel --help [COMMAND]
 USAGE
   $ sentinel COMMAND
@@ -160,7 +160,7 @@ EXAMPLES
   $ sentinel deploy
 ```
 
-_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.3/dist/commands/deploy.ts)_
+_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.9/dist/commands/deploy.ts)_
 
 ## `sentinel destroy`
 
@@ -177,7 +177,7 @@ EXAMPLES
   $ sentinel destroy
 ```
 
-_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.3/dist/commands/destroy.ts)_
+_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.9/dist/commands/destroy.ts)_
 
 ## `sentinel help [COMMAND]`
 
@@ -214,7 +214,7 @@ EXAMPLES
   $ sentinel init
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.3/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.9/dist/commands/init.ts)_
 
 ## `sentinel inspect app`
 
@@ -276,7 +276,7 @@ EXAMPLES
   $ sentinel metrics
 ```
 
-_See code: [dist/commands/metrics.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.3/dist/commands/metrics.ts)_
+_See code: [dist/commands/metrics.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.9/dist/commands/metrics.ts)_
 
 ## `sentinel plugins`
 
