@@ -121,7 +121,7 @@ export default class Init extends Command {
   }
 
   private async executeConfigScript(): Promise<string> {
-    const scriptPath = `/$HOME/.sentinel/scripts`
+    const scriptPath = `${process.env.HOME}/.sentinel/scripts`
     return new Promise((resolve: any, reject: any) => {
       childProcess.exec(`cd ${scriptPath}/ && chmod +x config.sh && ./config.sh`, (err: any, contents: any) => {
         if (err) {
