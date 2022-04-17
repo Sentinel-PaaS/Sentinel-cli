@@ -44,7 +44,7 @@ export default class App extends Command {
         this.log(`Service Name: ${service.serviceName}`)
         this.log(`Service Replicas: ${service.serviceReplicas}`)
         this.log(`Service Tasks:\n `)
-        service.servicesTasks.forEach((task: any) => {
+        service.serviceTasks.forEach((task: any) => {
           this.log(`\tTask Status: ${task.taskStatus}`)
           this.log(`\tTask Status Timestamp: ${task.taskStatusTimestamp}`)
           this.log(`\tTask Slot: ${task.taskSlot}`)
