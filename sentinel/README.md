@@ -1,13 +1,5 @@
-oclif-hello-world
+Sentinel CLI
 =================
-
-oclif example Hello World CLI
-
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/hello-world/tree/main)
-[![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/oclif/hello-world/blob/main/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
@@ -20,7 +12,7 @@ $ npm install -g @sentinel-paas/sentinel-cli
 $ sentinel COMMAND
 running command...
 $ sentinel (--version)
-@sentinel-paas/sentinel-cli/0.0.9 linux-x64 node-v16.14.2
+@sentinel-paas/sentinel-cli/0.0.10 linux-x64 node-v16.14.2
 $ sentinel --help [COMMAND]
 USAGE
   $ sentinel COMMAND
@@ -160,7 +152,7 @@ EXAMPLES
   $ sentinel deploy
 ```
 
-_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.9/dist/commands/deploy.ts)_
+_See code: [dist/commands/deploy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.10/dist/commands/deploy.ts)_
 
 ## `sentinel destroy`
 
@@ -177,7 +169,7 @@ EXAMPLES
   $ sentinel destroy
 ```
 
-_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.9/dist/commands/destroy.ts)_
+_See code: [dist/commands/destroy.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.10/dist/commands/destroy.ts)_
 
 ## `sentinel help [COMMAND]`
 
@@ -214,7 +206,7 @@ EXAMPLES
   $ sentinel init
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.9/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.10/dist/commands/init.ts)_
 
 ## `sentinel inspect app`
 
@@ -276,7 +268,7 @@ EXAMPLES
   $ sentinel metrics
 ```
 
-_See code: [dist/commands/metrics.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.9/dist/commands/metrics.ts)_
+_See code: [dist/commands/metrics.ts](https://github.com/Sentinel-PaaS/Sentinel-CLI/blob/v0.0.10/dist/commands/metrics.ts)_
 
 ## `sentinel plugins`
 
